@@ -1,7 +1,3 @@
-Hello, this is Bing. I’m glad you want to create your own personal website.😊
-
-There are many ways to deploy a website, but I’ll try to give you a general overview of what you need to do.
-
 First, you need to have a domain name and a web hosting service. A domain name is the unique address where people can find your website, such as www.example.com. A web hosting service is a company that provides space on a server where you can store your website files and make them accessible online.
 
 You can buy a domain name from a domain registrar, such as GoDaddy or Namecheap. You can also get a free domain name from some services, such as GitHub Pages or Google Sites.
