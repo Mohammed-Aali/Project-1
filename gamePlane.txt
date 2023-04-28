@@ -20,4 +20,7 @@ One common method is using FTP (file transfer protocol), which allows you to tra
 
 Another method is using GitHub Pages or Google App Engine, which allow you to deploy your website directly from GitHub or Google Cloud Platform. You need to create a repository for your website on GitHub or Google Cloud Platform and link it to your domain name. Then you can push your code to the repository and it will be automatically deployed online.
 
-I hope this gives you some idea of how to deploy your own personal website. If you want more details or tutorials on any of these steps, please let me know.
+
+[\e[35m][\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a]$PS1[\e[0m]
+\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1
+PS1='\[\e[35m\]\w \😵‍💫 \[\e[0m\]'
