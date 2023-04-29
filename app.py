@@ -1,4 +1,4 @@
-from flask import Flask, redirect
+from flask import Flask, redirect, url_for, render_template
 
 # configure application
 app = Flask(__name__)
@@ -6,17 +6,8 @@ app = Flask(__name__)
 # set home page
 @app.route('/')
 def index():
-    return f'Hello and welcome to our humble site'
-
-# set users page
-@app.route('/<name>')
-def user(name):
-    return f'Hello, {name}'
-
-# set admin page
-@app.route('/admin')
-def admin():
-    return redirect('/')
+    return render_template('index.html')
 
 if __name__ == '__main__':
-    app.run()
+    # automate the detection of changes in the server side, meaning I won't have to reload everytime I have to see changes
+    app.run(debug=True)
