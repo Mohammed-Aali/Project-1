@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/static/style.css" type="text/css" rel="stylesheet">
+    <title>3ffect: {{ block title }}{{ blockend }}</title>
+</head>
+<body>
+    <header id="luxbar" class="luxbar-fixed">
+        <input type="checkbox" class="luxbar-checkbox" id="luxbar-checkbox"/>
+        <div class="luxbar-menu luxbar-menu-right luxbar-menu-material-cyan">
+            <ul class="luxbar-navigation">
+                <li class="luxbar-header">
+                    <a href="#" class="luxbar-brand">LUXBAR</a>
+                    <label class="luxbar-hamburger luxbar-hamburger-doublespin" 
+                    id="luxbar-hamburger" for="luxbar-checkbox"> <span></span> </label>
+                </li>
+                <li class="luxbar-item"><a href="#">Item 1</a></li>
+                <li class="luxbar-item"><a href="#">Item 2</a></li>
+            </ul>
+        </div>
+    </header>
+    <main>
+        {{ block main }}{{ blockend }}
+    </main>
+    <footer>
+        <div class="footer-row">
+            <div class="footer-column">
+                <img src="/static/images/butterfly_logo.png" alt="Logo" class="logo">
+                <p>Hi, I'm a web developer who loves to create awesome websites with modern technologies and frameworks. I have some cool projects in the works that I can't wait to share with you. If you want to work with me, please get in touch below or follow me on social media. Thanks for checking out my portfolio!</p>
+            </div>
+            <div class="footer-column"></div>
+            <div class="footer-column"></div>
+            <div class="footer-column"></div>
+        </div>
+    </footer>
+</body>
+</html>

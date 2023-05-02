@@ -1,5 +1,10 @@
-from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session
-from flask_session import Session
-from werkzeug.security import check_passwork_hash, generate_password_hash
+from flask import Flask
 
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return 'hello world'
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0',debug=True)
