@@ -24,7 +24,12 @@ def after_request(response):
 
 @app.route('/')
 def index():
+    """Display Projects"""
     return render_template('index.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    return render_template('login.html')
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',debug=True)
