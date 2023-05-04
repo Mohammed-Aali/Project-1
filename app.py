@@ -1,3 +1,4 @@
+from email.message import EmailMessage
 from cs50 import SQL
 from flask import Flask, render_template, flash, redirect, request, session
 from flask_session import Session
@@ -22,13 +23,36 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
+
+subject = 'Registration Confirmation'
+body = """ 
+Thank you for registering with us. Your registration is now complete.
+
+Your confirmation code is: [Code]
+
+Please use this code to verify your account.
+
+If you have any questions or concerns, please don’t hesitate to contact us.
+
+Best regards, Mohammed 
+"""
+password = os.environ.get('EMAIL_PASSWORD')
+
+
 @app.route('/')
 def index():
     """Display Projects"""
+    print(password)
+    print('hello world')
     return render_template('index.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    return render_template('login.html')
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
     return render_template('login.html')
 
 if __name__ == "__main__":
