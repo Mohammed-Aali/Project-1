@@ -1,4 +1,3 @@
-from email.message import EmailMessage
 from cs50 import SQL
 from flask import Flask, render_template, flash, redirect, request, session
 from flask_session import Session
@@ -42,8 +41,6 @@ password = os.environ.get('EMAIL_PASSWORD')
 @app.route('/')
 def index():
     """Display Projects"""
-    print(password)
-    print('hello world')
     return render_template('index.html')
 
 @app.route('/login', methods=['GET', 'POST'])

@@ -1,30 +1,33 @@
 import os 
 import smtplib
-import imghdr
+from imghdr import what
 from email.message import EmailMessage
 
-EMAIL_ADDRESS = os.environ.get('EMAIL_ADDRESS')
+# define sender, receiver, subject and message body
+sender = os.environ.get('EMAIL_ADDRESS')
+receiver = 'alalimohammed258@gmail.com'
 EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD')
 
+print(EMAIL_ADDRESS)
+print(EMAIL_PASSWORD)
+
 msg = EmailMessage()
-msg['Subject'] = "Check out Brons as a Puppy"
-msg["From"] = EMAIL_ADDRESS
-msg["To"] = 'alalimohammed258@gmail.com'
-msg.set_content("Image_attached...")
+msg['Subject'] = 'Registration Confirmation'
+msg['From'] = EMAIL_ADDRESS
+msg['To'] = 'alalimohammed258@gmail.com'
+msg.set_content(f"""<htm>
+<h3>Thank you for registering with us. Your registration is now complete.<h3>
 
-print(os.listdir())
-print(os.getcwd())
-print(os.chdir(static))
+<p>👇👇👇Your confirmation code is 👇👇👇:</p>
+                
+                <h1>[Code]</h1>
 
-with open(r"C:\Users\Ghost\Project-1\static\images\butterfly_copy.jpg", 'rb') as f:
-    file_data = f.read() 
-    file_type = imghdr.what(f.name)
+<p>Please use this code to verify your account.</p>
 
-# with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
-#     smtp.ehlo()
-#     smtp.starttls()
-#     smtp.ehlo()
-
-#     smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
-
-#     smtp.send_message(msg)
+<p>If you have any questions or concerns, please dont hesitate to contact us.</p>
+<br><br>
+<p>Best regards, 3effect team 👻</p>
+</html>""")
+with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+    smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+    smtp.send_message(msg)
