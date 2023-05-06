@@ -22,22 +22,6 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-
-subject = 'Registration Confirmation'
-body = """ 
-Thank you for registering with us. Your registration is now complete.
-
-Your confirmation code is: [Code]
-
-Please use this code to verify your account.
-
-If you have any questions or concerns, please don’t hesitate to contact us.
-
-Best regards, Mohammed 
-"""
-password = os.environ.get('EMAIL_PASSWORD')
-
-
 @app.route('/')
 def index():
     """Display Projects"""
@@ -45,12 +29,39 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """Log user in"""
+
+    # forgets any user_id
+    session.clear()
+
     return render_template('login.html')
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    return render_template('login.html')
+    """Register user"""
+    if request.method == 'POST':
+        return redirect('/confirm')
+    else:
+        print('bye')
+        return render_template('register.html')
+
+@app.route('/confirm', methods=['GET', 'POST'])
+def confirm():
+    if request.method == 'POST':
+        return 'confirmation is good'
+    else:
+        return render_template("confirm.html")
+
+@app.route('/logout')
+def logout():
+    """ Log user out """
+
+    # forget any user_id
+    session.clear()
+
+    # redirect user to login form
+    return redirect('/login')
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',debug=True)

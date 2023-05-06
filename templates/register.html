@@ -1,0 +1,108 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+<div class="container-fluid py-5 text-center" style="max-width: 350px;">
+    <form action="/register" method="post">
+        <div class="form-floating mb-3">
+            <input autofocus autocomplete name="Email" type="email" class="form-control" id="emailInput" placeholder="3ffect@example.com" required>
+            <label for="emailInput">Email</label>
+            <div id='emailCheck'class="invalid-feedback" role="alert"></div>
+        </div>
+        <div class="form-floating mb-3">
+            <input autocomplete name="password" type="password" class="form-control" id="password" placeholder="Password" required>
+            <label for="password">Password</label>
+            <div id='passCheck'class="invalid-feedback" role="alert"></div>
+        </div>
+        <div class="form-floating mb-3">
+            <input autocomplete name="password" type="password" class="form-control" id="confirmPassword" placeholder="Password" required>
+            <label for="password">Password confimarion</label>
+            <div id ='passTest' style="display:none;" class="invalid-feedback">Password must match.</div>
+        </div>
+        <p>Already have an account? <a href="/login">Sign in</a></p>
+        <button class="btn btn-primary" type="submit">Sign up</button>
+    </form>
+</div>
+
+<script>
+
+    // define a an object array of regEx with the message associated with them
+    let regexArray = [
+        {regex: /[a-z]/, msg: 'Password must contain at least one lowercase letter.'},
+        {regex: /[A-Z]/, msg: 'Password must contain at least one uppercase letter.'},
+        {regex: /\d/, msg: "Password must contain at least one number."},
+        {regex: /[\W_]/, msg: 'Password must contain at least one special character (!, # or %).'},
+        {regex: /.{8,32}/, msg: "Password must be between 8 and 32 characters long."}
+    ]
+
+    // define variable
+    let checkResult, checkConfirm;
+    let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/
+    const email = document.getElementById('emailInput')
+    const form = document.getElementsByTagName('form')[0]
+    const password = document.getElementById("password")
+    const confirmPassword = document.getElementById("confirmPassword")
+    const passTest = document.getElementById("passTest")
+    const passCheck = document.getElementById("passCheck")
+    const emailCheck = document.getElementById("emailCheck")
+
+    // check the email for validity using the regexp provided for the email
+    email.addEventListener('input', event => {
+        checkResult = true
+        emailIn = event.target.value
+        if(emailRegex.test(emailIn)) {
+            emailCheck.innerHTML = '<span style="color: green;">Nice 😊</span>'
+        } else {
+            checkResult = false
+            emailCheck.classList.add('d-block');
+            emailCheck.innerHTML = 'Please enter a valid email Adress';
+        }
+    })
+    // check password for validity using the regexp Array
+    password.addEventListener('input', event => {
+    passwordIn = event.target.value
+    checkResult = true
+    regexArray.forEach(item => {
+        if(!item.regex.test(passwordIn)) {
+        checkResult = false
+        passCheck.classList.add('d-block')
+        passCheck.innerHTML = `<p>${item.msg}</p>`
+        } 
+        });
+        if (checkResult) {
+            passCheck.innerHTML = '<span style="color: green;">Nice 😊</span>'
+        }
+    });
+    // check for confimarion
+    confirmPassword.addEventListener('input', event => {
+        if (passwordIn != event.target.value)
+        {
+            checkConfirm = false;
+            passTest.classList.add('d-block')
+        }
+        else
+        {
+            checkConfirm = true;
+            passTest.className = passTest.className.replace('d-block', 'gone')
+        }
+    })
+
+    // prevent form default
+    form.addEventListener('submit', event => {
+        if (!checkResult || !checkConfirm)
+        {
+            form.classList.add("was-validated");
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    })
+</script>
+<style>
+    .was-validated .form-control:invalid {
+        border-color: red;
+    }
+</style>
+{% endblock %}

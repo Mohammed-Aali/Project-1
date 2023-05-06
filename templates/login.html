@@ -3,17 +3,18 @@
 Login
 {% endblock %}
 {% block main %}
-<div class="container" style="max-width: 350px;">
-    <form>
+<div class="container-fluid py-5 text-center" style="max-width: 350px;">
+    <form action="/login" method="post">
         <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-            <label for="floatingInput">Username</label>
+            <input name="Email" type="username" class="form-control" id="floatingInput" type="text" placeholder="name@example.com">
+            <label for="floatingInput">Email</label>
           </div>
-          <div class="form-floating">
-            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+          <div class="form-floating mb-3">
+            <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
             <label for="floatingPassword">Password</label>
         </div>
-        <button type="submit" class="btn btn-primary mt-3">Submit</button>
+        <p>Don't have an account? <a href="/register">Sign up</a></p>
+        <button type="submit" class="btn btn-primary mt-3">Sign in</button>
     </form>
 </div>
 <script></script>
