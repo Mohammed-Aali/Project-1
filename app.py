@@ -1,7 +1,10 @@
+import re, os
 from cs50 import SQL
 from flask import Flask, render_template, flash, redirect, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
+
+from helpers import apology
 
 # configure application
 app = Flask(__name__)
@@ -34,6 +37,8 @@ def login():
     # forgets any user_id
     session.clear()
 
+    
+
     return render_template('login.html')
 
 
@@ -41,7 +46,26 @@ def login():
 def register():
     """Register user"""
     if request.method == 'POST':
-        return redirect('/confirm')
+        # set up the variables
+        email = request.form.get('email')
+        password = request.form.get('password')
+        confirm = request.form.get('confirmation')
+
+        # set up regexp for checks
+        password_regexp = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,32}$"
+        email_regex = r"^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$"
+
+        # check vairables
+        check_email_regexp = re.search(email_regex, email)
+        check_password_regexp = re.search(password_regexp, password)
+
+        # go to confirm page for code
+        if not check_password_regexp:
+            return apology('Always has been', 'Invalid Password')
+        elif not check_email_regexp:
+            return apology("Always has been",'Invalid Email')
+        else:
+            return redirect('/confirm')
     else:
         print('bye')
         return render_template('register.html')
@@ -49,7 +73,7 @@ def register():
 @app.route('/confirm', methods=['GET', 'POST'])
 def confirm():
     if request.method == 'POST':
-        return 'confirmation is good'
+        return apology('confirmation is a success', 404)
     else:
         return render_template("confirm.html")
 
