@@ -5,16 +5,17 @@ Confirm Code
 {% block main %}
 <div class="container-fluid py-5 text-center" style="max-width: 350px;">
     <div class="alert alert-info"><p> Thank you for your interest in our service. We have sent you an email to confirm your subscription. Please check your inbox and follow the instructions to activate your account. If you don’t see the email, please check your spam folder or contact us for assistance.</p> </div>
-    <form action="/confirm" method="post">
+    <form action="/confirm" method="post" novalidate>
         <div class="form-floating mb-3">
-            <input autofocus name="Email" type="text" class="form-control" id="confirmationCode" placeholder="Enter the 6 characters you received" maxlength="6" required>
+            <input autofocus name="confirmationCode" type="text" class="form-control text-center" id="confirmationCode" placeholder="Enter the 6 characters you received" maxlength="6" required>
             <label for="confirmationCode">Confirmation Code</label>
-            <div id='emailCheck'class="invalid-feedback" role="alert"></div>
-        </div>
-        <div class="invalid-feedback">
-            Please enter a valid confirmation code.
+            <div > {{ msg|safe }} </div>
         </div>
         <button type="submit" class="btn btn-primary">Confirm</button>
     </form>
 </div>
+
+<script>
+    
+</script>
 {% endblock %}

@@ -31,11 +31,11 @@
 
     // define a an object array of regEx with the message associated with them
     let regexArray = [
+    {regex: /^[^]{8,32}$/, msg: "Password must be exactly between 8 and 32 characters long."},
         {regex: /[a-z]/, msg: 'Password must contain at least one lowercase letter.'},
         {regex: /[A-Z]/, msg: 'Password must contain at least one uppercase letter.'},
         {regex: /\d/, msg: "Password must contain at least one number."},
-        {regex: /[\W_]/, msg: 'Password must contain at least one special character (!, # or %).'},
-        {regex: /^[^]{8,32}$/, msg: "Password must be exactly between 8 and 32 characters long."}
+        {regex: /[\W_]/, msg: 'Password must contain at least one special character (!, # or %).'}
     ]
 
     // define variable
