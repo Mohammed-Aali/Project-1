@@ -7,6 +7,8 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+website.db
+gamePlan.txt
 .Python
 build/
 develop-eggs/
