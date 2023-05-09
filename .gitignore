@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# databases
+*Db.*
 # C extensions
 *.so
 
@@ -25,7 +27,6 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
-/website.db
 /gamePlan.txt
 
 # PyInstaller
