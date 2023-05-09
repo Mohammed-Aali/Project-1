@@ -8,7 +8,7 @@ __pycache__/
 
 # Distribution / packaging
 website.db
-gamePlan.txt
+/gamePlan.txt
 .Python
 build/
 develop-eggs/
