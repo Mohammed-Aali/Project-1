@@ -7,8 +7,6 @@ __pycache__/
 *.so
 
 # Distribution / packaging
-website.db
-/gamePlan.txt
 .Python
 build/
 develop-eggs/
@@ -27,6 +25,8 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+/website.db
+/gamePlan.txt
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
