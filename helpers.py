@@ -35,13 +35,13 @@ def register_required(f):
 
 # this code generates a string of chars and digits that is six chars long
 def generate_code(length):
-    code = ''.join(secrets.choice(string.ascii_lowercase + string.digits) for x in range(length))
+    code = ''.join(secrets.choice(string.ascii_letters + string.digits) for x in range(length))
     return str(code) 
 
 # this code sends an email to the users email for confimation 
 def send_email(receiver, code):
 
-    # define sender, receiver, subject and message body
+    # define sender, subject and message body
     sender = os.environ.get('EMAIL_ADDRESS')
     password = os.environ.get('EMAIL_PASSWORD')
     subject = 'Your registration confirmation'

@@ -10,12 +10,12 @@
         <div class="form-floating mb-3">
             <input autofocus autocomplete name="email" type="email" class="form-control" id="emailInput" placeholder="3ffect@example.com" required>
             <label for="emailInput">Email</label>
-            <div id='emailCheck'class="invalid-feedback" role="alert"></div>
+            <div id='emailCheck'class="invalid-feedback" role="alert">{{ msg }}</div>
         </div>
         <div class="form-floating mb-3">
             <input autocomplete name="password" type="password" class="form-control" id="password" placeholder="Password" required>
             <label for="password">Password</label>
-            <div id='passCheck'class="invalid-feedback" role="alert"></div>
+            <div id='passCheck'class="invalid-feedback mt-1" role="alert"></div>
         </div>
         <div class="form-floating mb-3">
             <input autocomplete name="confirmation" type="password" class="form-control" id="confirmPassword" placeholder="Password" required>
@@ -28,7 +28,15 @@
 </div>
 
 <script>
-
+    // on load window
+    window.onload = () =>
+    {
+        console.log("it is laoding")
+        if (emailCheck.innerHTML === 'Email is already in use') {
+            emailCheck.classList.add("d-block")
+        }
+    }
+    
     // define a an object array of regEx with the message associated with them
     let regexArray = [
     {regex: /^[^]{8,32}$/, msg: "Password must be exactly between 8 and 32 characters long."},
@@ -49,13 +57,14 @@
     const passCheck = document.getElementById("passCheck")
     const emailCheck = document.getElementById("emailCheck")
 
-    // check the email for validity using the regexp provided for the email
+    
+
     email.addEventListener('input', event => {
         checkResult = true
         emailIn = event.target.value
         if(emailRegex.test(emailIn)) {
             emailCheck.innerHTML = '<span style="color: green;">Nice 😊</span>'
-        } else {
+        } else { 
             checkResult = false
             emailCheck.classList.add('d-block');
             emailCheck.innerHTML = 'Please enter a valid email Adress';
