@@ -4,18 +4,61 @@ Confirm Code
 {% endblock %}
 {% block main %}
 <div class="container-fluid py-5 text-center" style="max-width: 350px;">
-    <div class="alert alert-info"><p> Thank you for your interest in our service. We have sent you an email to confirm your subscription. Please check your inbox and follow the instructions to activate your account. If you don’t see the email, please check your spam folder or contact us for assistance.</p> </div>
+    <div class="alert alert-info"><p> We have sent you an email to confirm your subscription. Please check your inbox and follow the instructions to activate your account. If you don't see the email, please check your spam folder or contact us for assistance.</p> </div>
     <form action="/confirm" method="post" novalidate>
         <div class="form-floating mb-3">
-            <input autofocus name="confirmationCode" type="text" class="form-control text-center" id="confirmationCode" placeholder="Enter the 6 characters you received" maxlength="6" required>
+            <input autofocus name="confirmationCode" type="text" class="form-control" id="confirmationCode" placeholder="Enter the 6 characters you received" maxlength="6" required>
             <label for="confirmationCode">Confirmation Code</label>
-            <div > {{ msg|safe }} </div>
+            <div id='confirmCheck'class="invalid-feedback" role="alert">{{ msg }}</div>
         </div>
-        <button type="submit" class="btn btn-primary">Confirm</button>
+        <div class="d-grid gap-2">
+            <button type="submit" name="submit" class="btn btn-primary" value="confirm">Confirm</button>
+            <button type="submit" name="submit" class="btn btn-secondary mt-3" value="resend">Resend Code</button>
+        </div>
     </form>
 </div>
 
 <script>
+    // on load window
+    window.onload = () =>
+    {
+        if (confirmCheck.innerHTML === 'Please enter a valid confirmation code.') {
+            confirmCheck.classList.add("d-block")
+        }
+    }
+
+    // set up the variables
+    const confirmCheck = document.getElementById('confirmCheck');
+    const confirmationCode = document.getElementById('confirmationCode')
+    let regExp = /^[0-9a-zA-Z]{6}$/
+    const form = document.getElementsByTagName('form')[0]
+    let passCheck = false;
+
+    // add event listener to check for characters
+    confirmationCode.addEventListener('input', (e) => {
+        codeIn = event.target.value
+        if(!regExp.test(codeIn)) {
+            confirmCheck.innerHTML = 'Code Must be 6 characters';
+            confirmCheck.classList.add("d-block")
+        } else {
+            passCheck = true;
+            confirmCheck.className = confirmCheck.className.replace('d-block', 'gone')
+        }
+    })
+
+    // add event listener to stop the form in case it did not meat conditions
+    form.addEventListener('submit', event => {
+        if (!passCheck)
+        {
+            console.log('cant sent')
+            form.classList.add("was-validated");
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    })
+
     
+
+
 </script>
 {% endblock %}

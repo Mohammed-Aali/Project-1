@@ -52,14 +52,17 @@ def login():
             return render_template("login.html", msg=msg)
 
         # Query database for username
-        rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+        rows = db.execute("SELECT * FROM users WHERE email = ?", request.form.get("email"))
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
             return render_template("login.html", msg=msg)
 
         # Remember which user has logged in
-        session["user_id"] = rows[0]["id"]
+        if not session['user_id']:
+            session["user_id"] = rows[0]["users_id"]
+        else:
+            pass
 
         # Redirect user to home page
         return redirect("/")
@@ -78,7 +81,7 @@ def register():
         password = request.form.get('password')
         confirm = request.form.get('confirmation')
         msg = 'Email is already in use'
-
+    
         # check if email exist in our data base
         row = db.execute("SELECT email FROM users WHERE email = ?", email )
 
@@ -120,29 +123,58 @@ def confirm():
         email = session.get('email', None)
         code = session.get('code', None)
         password = session.get('password', None)
-        msg = "<div class='invalid-feedback pt-1 d-block' role='alert'> Please enter a valid confirmation code. </div>"
+        msg = "Please enter a valid confirmation code."
         
-        # incase we could not send the code
-        if code == None or email == None or password == None:
-            return apology('Easy regestration?', 'We encountered an error oops!')
-            session.clear()
-            flash('Oopsie! we have to register you again 😞')
+        # incase the button of confimr was pressed
+        if request.form['submit'] == 'confirm':
 
-        # compare confirm code againts random code
-        if (str(code.lower()) != str(confirm_code.lower())):
-            return render_template('confirm.html', msg=msg)
-        else:
-            # add to database
-            try:
-                db.execute('INSERT INTO users (email, hash) VALUES (?, ?)', email, password)
-            except sqlite3.IntegrityError as err:
-                return apology('Your data going into our database', f'{err}')
+            # incase we could not send the code
+            if code == None or email == None or password == None:
+                return apology('We encountered an error oops!?', 'Easy regestration? ')
                 session.clear()
                 flash('Oopsie! we have to register you again 😞')
-            
-            flash('Your registration was successful 👍')
-            return redirect('/')
+
+            # compare confirm code againts random code
+            if (str(code.lower()) != str(confirm_code.lower())):
+                return render_template('confirm.html', msg=msg)
+            else:
+                # add to database
+                try:
+                    db.execute('INSERT INTO users (email, hash) VALUES (?, ?)', email, password)
+
+                    # Query database for the email
+                    rows = db.execute('SELECT * FROM users WHERE email = ?', email)
+                    # Ensure email exists 
+                    if len(rows) != 1:
+                        return apology('We encountered an error oops!', 'Easy regestration? ')
+                        session.clear()
+                        flash('Oopsie! we have to register you again 😞')
+
+                    # Remember which user has logged in
+                    session["user_id"] = rows[0]["users_id"]
+
+                except sqlite3.IntegrityError as err:
+                    return apology(f'{err}', 'Your data going into our database')
+                    session.clear()
+                    flash('Oopsie! we have to register you again 😞')
+                
+                flash('Your registration was successful 👍')
+                return redirect('/')
+
+        # Handels resending the email button
+        elif request.form['submit'] == 'resend':
+            session['code'] = generate_code(6)
+            send_email(email, session.get('code'))
+            print(f'this should print out resend and a new code {code}')
+            return render_template('confirm')
+
+        # if the process is abandond for some reason 
+        session.clear()
+        flash('Oopsie! we have to register you again 😞')
     else:
+        if session['users_id']:
+            flash('You are already signed in! 😆')
+            return redirect('/')
         return render_template("confirm.html")
 
 @app.route('/logout')
