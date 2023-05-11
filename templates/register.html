@@ -6,7 +6,7 @@
 
 {% block main %}
 <div class="container-fluid py-5 text-center" style="max-width: 350px;">
-    <form action="/register" method="post" novalidate>
+    <form action="/register" method="post"  enctype="multipart/form-data" novalidate>
         <div class="form-floating mb-3">
             <input autofocus autocomplete name="email" type="email" class="form-control" id="emailInput" placeholder="3ffect@example.com" required>
             <label for="emailInput">Email</label>

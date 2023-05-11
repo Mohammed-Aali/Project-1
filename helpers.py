@@ -1,4 +1,4 @@
-import random, string, secrets, configparser, smtplib
+import random, string, secrets, configparser, smtplib, time
 
 from email.message import EmailMessage
 from flask import render_template, session, redirect
@@ -90,7 +90,10 @@ def send_email(receiver, code):
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
             smtp.login(sender, password)
             smtp.send_message(msg)
-            print("Successfully sent email")
+            # set the timer session variable
+            current_time = time.time()
+            session['timer'] = current_time
+            print(f"the email was sent at this time: {session['timer']}")
     except socket.error as e:
         return apology(f"Could not connect to server - is it down? ({e.errno}): {e.strerror}")
 

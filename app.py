@@ -1,6 +1,7 @@
 import re
 import sqlite3
 import redis
+import time
 
 from cs50 import SQL
 from flask import Flask, url_for, render_template, flash, redirect, request, session
@@ -65,7 +66,7 @@ def login():
 
         # Remember which user has logged in
         if not session['user_id']:
-            session["user_id"] = rows[0]["users_id"]
+            session["user_id"] = rows[0]["user_id"]
         else:
             pass
 
@@ -117,7 +118,7 @@ def register():
 
             return redirect('/confirm')
     else:
-        if 'users_id' in session:
+        if 'user_id' in session:
             flash('You are already signed in! 😆')
             return redirect('/')
         else:
@@ -133,9 +134,10 @@ def confirm():
         code = session.get('code', None)
         password = session.get('password', None)
         msg = "Please enter a valid confirmation code."
+        action = request.form.get('action')
         
         # incase the button of confimr was pressed
-        if request.form['submit'] == 'confirm':
+        if request.form.get('confirm'):
 
             # incase we could not send the code
             if code == None or email == None or password == None:
@@ -155,7 +157,7 @@ def confirm():
                     rows = db.execute('SELECT * FROM users WHERE email = ?', email)
 
                     # Remember which user has logged in
-                    session["users_id"] = rows[0]["users_id"]
+                    session["user_id"] = rows[0]["user_id"]
 
                 except sqlite3.IntegrityError as err:
                     return apology(f'{err}', 'Your data going into our database')
@@ -166,17 +168,28 @@ def confirm():
                 return redirect('/')
 
         # Handels resending the email button
-        elif request.form['button'] == 'resend':
-            session['code'] = generate_code(6)
-            send_email(email, session.get('code'))
-            print(f'this should print out resend and a new code: {code}')
-            return render_template('confirm')
+        elif request.form.get("resend"):
+            # do some stuff related to the time module
+            current_time = time.time()
+            timer = session.get('timer', 0)
+            time_delta = current_time - timer
 
+            if time_delta < 120:
+                flash(f"You can only resend the code every 2 minutes. Please wait for {120 - int(time_delta)} seconds more.")
+                return redirect('/confirm')
+            else:
+                # first time set the value to the current time
+                session['timer'] = current_time
+                session['code'] = generate_code(6)
+                send_email(email, session.get('code'))
+                flash("New code has been sent to your Email.")
+                print(f'this should print out resend and a new code: {code} at {session["timer"]}')
+                return redirect('confirm')
         # if the process is abandond for some reason 
         session.clear()
         flash('Oopsie! we have to register you again 😞')
     else:
-        if 'users_id' in session:
+        if 'user_id' in session:
             flash('You are already signed in! 😆')
             return redirect('/')
         else:
