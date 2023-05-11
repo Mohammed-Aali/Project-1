@@ -1,8 +1,15 @@
-import random, string, secrets, os, smtplib
+import random, string, secrets, configparser, smtplib
 
 from email.message import EmailMessage
 from flask import render_template, session, redirect
 from functools import wraps
+
+
+# Create a ConfigParser onject
+config = configparser.ConfigParser()
+
+# read the config file
+config.read('app.ini')
 
 # this code snippet is from cs50x final project finance
 def apology(message, code=400):
@@ -18,6 +25,12 @@ def apology(message, code=400):
         return s
 
     return render_template("apology.html", top=code, bottom=escape(message)), code
+
+
+def hush():
+    banana = config['DEFAULT']['SECRET_KEY']
+    return banana
+
 
 # this code snippet is also from cs50x final project finance
 def register_required(f):
@@ -42,8 +55,8 @@ def generate_code(length):
 def send_email(receiver, code):
 
     # define sender, subject and message body
-    sender = os.environ.get('EMAIL_ADDRESS')
-    password = os.environ.get('EMAIL_PASSWORD')
+    sender = config['DEFAULT']['EMAIL_ADDRESS']
+    password = config['DEFAULT']['EMAIL_PASSWORD']
     subject = 'Your registration confirmation'
     message_body = f"""<html>
     <h3>Hello, and thank you for signing up with us</h3>

@@ -7,6 +7,8 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+/flask_session
+*.ini
 .Python
 build/
 develop-eggs/

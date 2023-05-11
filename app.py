@@ -1,19 +1,24 @@
 import re
 import sqlite3
+import redis
 
 from cs50 import SQL
 from flask import Flask, url_for, render_template, flash, redirect, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, generate_code, register_required, send_email
+from helpers import apology, generate_code, register_required, send_email, hush
 
 # configure application
 app = Flask(__name__)
 
-# Configure session to use filesystem (instead of signed cookies)
+# setting up a secret key
+app.config['SECRET_KEY'] = hush()
+
+# Configure session to use redis
 app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
+app.config["SESSION_TYPE"] = "redis"
+app.config["SESSION_REDIS"] = redis.from_url("redis://localhost:6379")
 Session(app)
 
 # configure CS50 Library to use SQLite database
@@ -112,7 +117,11 @@ def register():
 
             return redirect('/confirm')
     else:
-        return render_template('register.html')
+        if 'users_id' in session:
+            flash('You are already signed in! 😆')
+            return redirect('/')
+        else:
+            return render_template('register.html')
 
 @app.route('/confirm', methods=['GET', 'POST'])
 @register_required
@@ -144,14 +153,9 @@ def confirm():
 
                     # Query database for the email
                     rows = db.execute('SELECT * FROM users WHERE email = ?', email)
-                    # Ensure email exists 
-                    if len(rows) != 1:
-                        return apology('We encountered an error oops!', 'Easy regestration? ')
-                        session.clear()
-                        flash('Oopsie! we have to register you again 😞')
 
                     # Remember which user has logged in
-                    session["user_id"] = rows[0]["users_id"]
+                    session["users_id"] = rows[0]["users_id"]
 
                 except sqlite3.IntegrityError as err:
                     return apology(f'{err}', 'Your data going into our database')
@@ -162,20 +166,21 @@ def confirm():
                 return redirect('/')
 
         # Handels resending the email button
-        elif request.form['submit'] == 'resend':
+        elif request.form['button'] == 'resend':
             session['code'] = generate_code(6)
             send_email(email, session.get('code'))
-            print(f'this should print out resend and a new code {code}')
+            print(f'this should print out resend and a new code: {code}')
             return render_template('confirm')
 
         # if the process is abandond for some reason 
         session.clear()
         flash('Oopsie! we have to register you again 😞')
     else:
-        if session['users_id']:
+        if 'users_id' in session:
             flash('You are already signed in! 😆')
             return redirect('/')
-        return render_template("confirm.html")
+        else:
+            return render_template("confirm.html")
 
 @app.route('/logout')
 def logout():
