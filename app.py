@@ -183,7 +183,6 @@ def confirm():
                 session['code'] = generate_code(6)
                 send_email(email, session.get('code'))
                 flash("New code has been sent to your Email.")
-                print(f'this should print out resend and a new code: {code} at {session["timer"]}')
                 return redirect('confirm')
         # if the process is abandond for some reason 
         session.clear()
