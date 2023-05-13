@@ -48,34 +48,49 @@ def login():
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
+        
+        # set up the variables
+        email = request.form.get('email', None)
+        password = request.form.get('password', None)
 
-        # Ensure username was submitted
-        if not request.form.get("email"):
-            return render_template("login.html", msg=msg)
+        print(f'this is the email {email}')
+        # set up regexp for checks
+        password_regexp = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,32}$"
+        email_regex = r"^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$"
 
-        # Ensure password was submitted
-        elif not request.form.get("password"):
-            return render_template("login.html", msg=msg)
+        # check vairables
+        check_email_regexp = re.search(email_regex, str(email))
+        check_password_regexp = re.search(password_regexp, str(password))
+
+        # confirm checks are good
+        if not check_password_regexp:
+            return apology('Invalid Password', 'Valid Password')
+        elif not check_email_regexp:
+            return apology("Invalid Email",'Valid Email')
 
         # Query database for username
         rows = db.execute("SELECT * FROM users WHERE email = ?", request.form.get("email"))
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+            msg = "Email or Password don't match"
             return render_template("login.html", msg=msg)
 
         # Remember which user has logged in
-        if not session['user_id']:
+        if not 'user_id' in session:
             session["user_id"] = rows[0]["user_id"]
-        else:
-            pass
 
         # Redirect user to home page
+        flash('Successfuly Signed In!')
         return redirect("/")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
-        return render_template("login.html")
+        if 'user_id' in session:
+            flash('You are already signed in! 😆')
+            return redirect('/')
+        else:
+            return render_template("login.html")
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -99,8 +114,8 @@ def register():
         email_regex = r"^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$"
 
         # check vairables
-        check_email_regexp = re.search(email_regex, email)
-        check_password_regexp = re.search(password_regexp, password)
+        check_email_regexp = re.search(email_regex, str(email))
+        check_password_regexp = re.search(password_regexp, str(password))
 
         # check for code confirmation and
         if not check_password_regexp:
@@ -114,7 +129,7 @@ def register():
             session['password'] = hash_password
             session['email'] = email
             session['code'] = generate_code(6)
-            send_email(email, session.get('code'))
+            send_email(email, session.get('code'), 1)
 
             return redirect('/confirm')
     else:
@@ -134,7 +149,7 @@ def confirm():
         code = session.get('code', None)
         password = session.get('password', None)
         msg = "Please enter a valid confirmation code."
-        action = request.form.get('action')
+
         
         # incase the button of confimr was pressed
         if request.form.get('confirm'):
@@ -181,18 +196,35 @@ def confirm():
                 # first time set the value to the current time
                 session['timer'] = current_time
                 session['code'] = generate_code(6)
-                send_email(email, session.get('code'))
+                send_email(email, session.get('code'), 1)
                 flash("New code has been sent to your Email.")
                 return redirect('confirm')
         # if the process is abandond for some reason 
         session.clear()
         flash('Oopsie! we have to register you again 😞')
+        return redirect('register')
     else:
         if 'user_id' in session:
             flash('You are already signed in! 😆')
             return redirect('/')
         else:
             return render_template("confirm.html")
+
+@app.route('/reset', methods=['GET', 'POST'])
+def reset():
+    """ Resets password """
+    if request.method == 'POST':
+        if request.form.get("confirm"):
+            confirm_code = request.form.get('confirmationCode')
+            flash('confirm post')
+            return render_template('reset.html')
+        elif request.form.get("resend"):
+            flash('resend post')
+            return render_template('reset.html')
+        flash('it is what it is')
+        return redirect('reset')
+    else: 
+        return render_template('reset.html')
 
 @app.route('/logout')
 def logout():
@@ -202,6 +234,7 @@ def logout():
     session.clear()
 
     # redirect user to front page
+    flash('Signed Out!')
     return redirect('/')
 
 if __name__ == "__main__":

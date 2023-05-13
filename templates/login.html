@@ -6,16 +6,86 @@ Login
 <div class="container-fluid py-5 text-center" style="max-width: 350px;">
     <form action="/login" method="post" enctype="multipart/form-data">
         <div class="form-floating mb-3">
-            <input autofocus autocomplete name="Email" type="username" class="form-control" id="floatingInput" type="text" placeholder="name@example.com" required>
+            <input id="emailInput" autofocus autocomplete name="email" type="username" class="form-control" id="floatingInput" type="text" placeholder="name@example.com" required>
             <label for="floatingInput">Email</label>
+            <div id='emailCheck'class="invalid-feedback" role="alert"></div>
           </div>
           <div class="form-floating mb-3">
-            <input autocomplete name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password" required>
+            <input id="password" autocomplete name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password" required>
             <label for="floatingPassword">Password</label>
+            <div id='passCheck'class="invalid-feedback mt-1" role="alert">{{ msg }}</div>
         </div>
         <p>Don't have an account? <a href="/register">Sign up</a></p>
-        <p><a href="/register">Forgot your password?</a></p>
+        <p><a href="/reset">Forgot your password?</a></p>
         <button type="submit" class="btn btn-primary mt-3">Sign in</button>
+        <div id='signIn'class="invalid-feedback mt-1" role="alert"></div>
     </form>
 </div>
+
+<script>
+
+    window.onload = () =>
+    {
+        if (passCheck.innerHTML === "Email or Password don't match") {
+            passCheck.classList.add("d-block")
+        }
+    }
+    // define a an object array of regEx with the message associated with them
+    let regexArray = [
+        {regex: /^[^]{8,32}$/, msg: "Password must be exactly between 8 and 32 characters long."},
+        {regex: /[a-z]/, msg: 'Password must contain at least one lowercase letter.'},
+        {regex: /[A-Z]/, msg: 'Password must contain at least one uppercase letter.'},
+        {regex: /\d/, msg: "Password must contain at least one number."},
+        {regex: /[\W_]/, msg: 'Password must contain at least one special character (!, # or %).'}
+    ]
+
+    // setup variables
+    let checkResult, checkEmail, checkPass;
+    let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/
+    const email = document.getElementById('emailInput')
+    const form = document.getElementsByTagName('form')[0]
+    const password = document.getElementById("password")
+    const passCheck = document.getElementById("passCheck")
+    const emailCheck = document.getElementById("emailCheck")
+    const signIn = document.getElementById("signIn")
+
+    // check for email
+    email.addEventListener('input', event => {
+        checkResult = true
+        emailIn = event.target.value
+        if(emailRegex.test(emailIn)) {
+            emailCheck.innerHTML = '<span style="color: green;">Nice 😊</span>'
+        } else { 
+            checkResult = false
+            emailCheck.classList.add('d-block');
+            emailCheck.innerHTML = 'Please enter a valid email Adress';
+        }
+    })
+    // check password for validity using the regexp Array
+    password.addEventListener('input', event => {
+        passwordIn = event.target.value
+        checkResult = true
+        regexArray.forEach(item => {
+            if(!item.regex.test(passwordIn)) {
+            checkResult = false
+            passCheck.classList.add('d-block')
+            passCheck.innerHTML = `<p>${item.msg}</p>`
+            } 
+            });
+            if (checkResult) {
+                passCheck.innerHTML = '<span style="color: green;">Nice 😊</span>'
+            }
+    });
+
+    
+    // form check
+    form.addEventListener('submit', event => {
+        if (!checkResult)
+        {
+            form.classList.add("was-validated");
+            event.preventDefault();
+            event.stopPropagation();
+        } 
+    })
+</script>
 {% endblock %}
