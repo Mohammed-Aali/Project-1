@@ -68,7 +68,7 @@ def login():
         elif not check_email_regexp:
             return apology("Invalid Email",'Valid Email')
 
-        # Query database for username
+        # Query database for email
         rows = db.execute("SELECT * FROM users WHERE email = ?", request.form.get("email"))
 
         # Ensure username exists and password is correct
@@ -213,15 +213,17 @@ def confirm():
 @app.route('/reset', methods=['GET', 'POST'])
 def reset():
     """ Resets password """
+    # set up variables
+    email = request.form.get('email')
     if request.method == 'POST':
         if request.form.get("confirm"):
             confirm_code = request.form.get('confirmationCode')
             flash('confirm post')
             return render_template('reset.html')
         elif request.form.get("resend"):
-            flash('resend post')
+            flash('New code has been sent to your Email!')
             return render_template('reset.html')
-        flash('it is what it is')
+        
         return redirect('reset')
     else: 
         return render_template('reset.html')

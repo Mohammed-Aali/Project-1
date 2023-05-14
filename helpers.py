@@ -58,7 +58,7 @@ def send_email(receiver, code, type_of_message):
     sender = config['DEFAULT']['EMAIL_ADDRESS']
     password = config['DEFAULT']['EMAIL_PASSWORD']
     if type_of_message == 1:
-        subject = 'Your registration confirmation'
+        subject = 'Registration confirmation'
         message_body = f"""<html>
         <h3>Hello, and thank you for signing up with us</h3>
 
