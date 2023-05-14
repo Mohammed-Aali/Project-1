@@ -29,8 +29,7 @@ Reset
     const resendCodeCheck = document.querySelector('#resendCodeCheck')
     const alert = document.getElementById('alert')
     const form = document.getElementsByTagName('form')[0]
-    
-    
+
     // set up the onload window to check
     document.addEventListener("DOMContentLoaded", function() {
         let flash = document.getElementById('flash')
@@ -42,6 +41,17 @@ Reset
             }
         }
     )
+
+    // check if we should start the countdown
+    let remainingTimeCookie = document.cookie.split("; ").filter(function(row) {
+        row.startsWith('remainingTime=')
+    })[0]
+
+    if (remainingTimeCookie) {
+        let remainingTime = parseInt(remainingTimeCookie.split('=')[1])
+
+        structuredClone(remainingTime)
+    }
 
     // function for the countdown
     function startCountdown(remainingTime){
@@ -58,28 +68,21 @@ Reset
         let timerInterval = setInterval(function(){
             remainingTime--
             document.cookie = `remainingTime=${remainingTime}; path=/reset;`
-        })
-    }
-    form.addEventListener('submit', function() {
-        // set the logic for the counter
-        let remainingTime = 120;
-            
-
-        // to enable the button after two minutes has passed
-        setTimeout(function() {
-            resendBtn.removeAttribute('disabled')
-            resendCheck = true;
-        }, 120000)
-
-        let timerInterval = setInterval(function() {
-            remainingTime--
             resendBtn.innerHTML = `Resend Code In ${remainingTime} seconds`
 
             if (remainingTime == 0) {
-                clearInterval(timerInterval)
+                clearInterval(timerInterval);
                 resendBtn.innerHTML = '<span>Resend New Code</span>'
+                document.cookie = 'remainingTime=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
             }
         }, 1000)
+    }
+    form.addEventListener('submit', function() {
+        // set the logic for the counter
+        document.cookie = 'remainingTime=120; path=/reset;';
+            
+
+        
     })
     
         
