@@ -153,7 +153,6 @@ def confirm():
         
         # incase the button of confimr was pressed
         if request.form.get('confirm'):
-
             # incase we could not send the code
             if code == None or email == None or password == None:
                 return apology('We encountered an error oops!?', 'Easy regestration? ')
@@ -214,19 +213,49 @@ def confirm():
 def reset():
     """ Resets password """
     # set up variables
-    email = request.form.get('email')
     if request.method == 'POST':
-        if request.form.get("confirm"):
-            confirm_code = request.form.get('confirmationCode')
-            flash('confirm post')
-            return render_template('reset.html')
-        elif request.form.get("resend"):
-            flash('New code has been sent to your Email!')
-            return render_template('reset.html')
         
-        return redirect('reset')
-    else: 
-        return render_template('reset.html')
+        # set up variables
+        submit_button = request.form.get('submit_button')
+        print(f'the submit_button {submit_button}')
+        # handels the confirm button
+        if submit_button == 'confirm':
+            return redirect('/')
+
+        # incase the button of confirm was pressed 
+        elif submit_button == 'resend':
+            flash('resend request')
+            return 'Does not show up'
+        
+        flash('hello post')
+        return redirect('/reset')
+    else:
+
+        return render_template('reset1.html')
+
+@app.route('/reset1', methods=['GET', 'POST'])
+def reset1():
+    """ Resets password """
+    # set up variables
+    if request.method == 'POST':
+        
+        # set up variables
+        submit_button = request.form.get('submit_button')
+        print(f'the submit_button {submit_button}')
+        # handels the confirm button
+        if submit_button == 'confirm':
+            return redirect('/')
+
+        # incase the button of confirm was pressed 
+        elif submit_button == 'resend':
+            flash('resend request')
+            return 'Does not show up'
+        
+        flash('hello post')
+        return redirect('/reset')
+    else:
+
+        return render_template('reset1.html')
 
 @app.route('/logout')
 def logout():

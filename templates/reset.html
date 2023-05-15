@@ -4,31 +4,33 @@ Reset
 {% endblock %}
 {% block main %}
 <div class="container-fluid py-5 text-center" style="max-width: 350px;">
-    <form action="/reset" method="post" enctype="multipart/form-data">
-        <div id="alert" class="alert alert-info"><p> We're sorry to hear that you forgot your password. Enter your email address below and click "Send Reset Code". </p></div>
-        <div id="codeDiv" class="form-floating mb-3 gone">
+    <div id="alert" class="alert alert-info"><p> We're sorry to hear that you forgot your password. Enter your email address below and click "Send Reset Code". </p></div>
+    <form action="/reset" method="post" enctype="multipart/form-data" novalidate>
+        <!-- <div id="codeDiv" class="form-floating mb-3 gone">
             <input name="code" class="form-control" id="codeInput" type="text" placeholder="Code..">
             <label for="codeInput">Confirm</label>
-        </div>
+        </div> -->
         <div class="form-floating mb-3">
-            <input name="email" type="email" class="form-control" id="emailInput" placeholder="name@example.com">
+            <input autofocus name="email" type="email" class="form-control" id="emailInput" required placeholder="name@example.com">
             <label for="emailInput">Email</label>
         </div>
         <div class="d-grid gap-2">
-            <button type="submit" name="resend" value="resend" class="btn btn-primary mt-2" value="resend">Send Reset Code</button>
-            <button type="submit" name="confirm" value="confirm" class="btn btn-primary gone">Confirm Code</button>
+            <button type="submit" name="submit_button" value="confirm" class="btn btn-primary">Confirm</button>
+            <button type="submit" name="submit_button" value="resend" class="btn btn-primary mt-2">Resend Code</button>
         </div>
     </form>
 </div>
 <script>
     // set up variables
-    const confirmBtn = document.querySelector("button[name='confirm']")
+    const confirmBtn = document.querySelector("button[value='confirm']")
     const code = document.querySelector('#codeInput')
     const email = document.querySelector('#emailInput')
-    const resendBtn = document.querySelector("button[name='resend']")
+    const resendBtn = document.querySelector("button[value='resend']")
     const resendCodeCheck = document.querySelector('#resendCodeCheck')
     const alert = document.getElementById('alert')
     const form = document.getElementsByTagName('form')[0]
+    const btnDiv = document.querySelector('.d-grid')
+    
 
     // set up the onload window to check
     document.addEventListener("DOMContentLoaded", function() {
@@ -44,19 +46,19 @@ Reset
 
     // check if we should start the countdown
     let remainingTimeCookie = document.cookie.split("; ").filter(function(row) {
-        row.startsWith('remainingTime=')
+        return row.includes('remainingTime=')
     })[0]
 
     if (remainingTimeCookie) {
         let remainingTime = parseInt(remainingTimeCookie.split('=')[1])
 
-        structuredClone(remainingTime)
+        startCountdown(remainingTime)
     }
 
     // function for the countdown
     function startCountdown(remainingTime){
         // if remainingTime is = falsy do the following: make the remaining time equal to 120, else set it to the value we pass
-        remainingTime = remainingTime || 120
+        remainingTime = remainingTime || 10
         resendBtn.setAttribute('disabled', '')
 
         setTimeout(function() {
@@ -72,17 +74,17 @@ Reset
 
             if (remainingTime == 0) {
                 clearInterval(timerInterval);
-                resendBtn.innerHTML = '<span>Resend New Code</span>'
-                document.cookie = 'remainingTime=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                resendBtn.innerHTML = 'Resend New Code'
+                // destroy cookie
+                document.cookie = 'remainingTime=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/reset;';
             }
         }, 1000)
     }
     form.addEventListener('submit', function() {
         // set the logic for the counter
-        document.cookie = 'remainingTime=120; path=/reset;';
-            
-
-        
+        let remainingTime = 10// "120"
+        document.cookie = `remainingTime=${remainingTime}}; path=/reset;`;
+        startCountdown()        
     })
     
         

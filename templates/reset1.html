@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+{% block title %}
+reset
+{% endblock %}
+{% block main %}
+<div class="container-fluid py-5 text-center" style="max-width: 350px;">
+    <div id="alert" class="alert alert-info"><p> We're sorry to hear that you forgot your password. Enter your email address below and click "Send Reset Code". </p></div>
+    <form action="/reset1" method="post" enctype="multipart/form-data" novalidate>
+        <!-- <div id="codeDiv" class="form-floating mb-3 gone">
+            <input name="code" class="form-control" id="codeInput" type="text" placeholder="Code..">
+            <label for="codeInput">Confirm</label>
+        </div> -->
+        <div class="form-floating mb-3">
+            <input autofocus name="email" type="email" class="form-control" id="emailInput" required placeholder="name@example.com">
+            <label for="emailInput">Email</label>
+        </div>
+        <div class="d-grid gap-2">
+            <button type="submit" name="submit_button" value="confirm" class="btn btn-primary">Confirm</button>
+            <button type="submit" name="submit_button" value="resend" class="btn btn-primary mt-2">Resend Code</button>
+        </div>
+    </form>
+</div>
+<script>
+    
+</script>
+{% endblock %}
