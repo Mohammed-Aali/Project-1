@@ -4,7 +4,7 @@ import redis
 import time
 
 from cs50 import SQL
-from flask import Flask, url_for, render_template, flash, redirect, request, session
+from flask import Flask, url_for, render_template, flash, redirect, request, session, make_response
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -188,8 +188,8 @@ def confirm():
             timer = session.get('timer', 0)
             time_delta = current_time - timer
 
-            if time_delta < 120:
-                flash(f"You can only resend the code every 2 minutes. Please wait for {120 - int(time_delta)} seconds more.")
+            if time_delta < 60:
+                flash(f"You can only resend the code every 2 minutes. Please wait for {60 - int(time_delta)} seconds more.")
                 return redirect('/confirm')
             else:
                 # first time set the value to the current time
@@ -212,50 +212,54 @@ def confirm():
 @app.route('/reset', methods=['GET', 'POST'])
 def reset():
     """ Resets password """
-    # set up variables
+    # make a response object
+    res = make_response(redirect("/reset"))
+
+    # handles post
     if request.method == 'POST':
-        
-        # set up variables
-        submit_button = request.form.get('submit_button')
-        print(f'the submit_button {submit_button}')
+        cookies = request.cookies
+        time_remaining = cookies.get('time_remaining')
+        print(time_remaining)
         # handels the confirm button
-        if submit_button == 'confirm':
-            return redirect('/')
+        if request.form.get('confirm'):
+            flash('confirm')
+            return redirect('/reset')
 
-        # incase the button of confirm was pressed 
-        elif submit_button == 'resend':
-            flash('resend request')
-            return 'Does not show up'
-        
-        flash('hello post')
-        return redirect('/reset')
+
+        # handeles the reset button 
+        elif request.form.get('resend'):
+           # do some stuff related to the time moduel
+            end_time = time.time() + 60
+            # set the cookie value
+            res.set_cookie(
+            'time_remaining',
+            value=f'{end_time}',
+            max_age=60,
+            expires=None,
+            path=request.path,
+            domain=None,
+            secure=False,
+            httponly=False)
+            return res
+        if time_delta < 60:
+            flash(f"You can only resend the code every 2 minutes. Please wait for {60 - int(time_delta)} seconds more.")
+            return redirect('/reset')
+        else: 
+            flash('else')
+            # first time set the value to the current time
+            session['timer'] = current_time
+            session['code'] = generate_code(6)
+            send_email(email, session.get('code'), 1)
+            flash("New code has been sent to your Email.")
+            return redirect('/reset')
+        # if the process is abandond for some reason 
+        session.clear()
+        flash('Oopsie! we have to try to reset the password again 😞')
+        return redirect('reset')
+    # get request 
     else:
+        return render_template('reset.html')
 
-        return render_template('reset1.html')
-
-@app.route('/reset1', methods=['GET', 'POST'])
-def reset1():
-    """ Resets password """
-    # set up variables
-    if request.method == 'POST':
-        
-        # set up variables
-        submit_button = request.form.get('submit_button')
-        print(f'the submit_button {submit_button}')
-        # handels the confirm button
-        if submit_button == 'confirm':
-            return redirect('/')
-
-        # incase the button of confirm was pressed 
-        elif submit_button == 'resend':
-            flash('resend request')
-            return 'Does not show up'
-        
-        flash('hello post')
-        return redirect('/reset')
-    else:
-
-        return render_template('reset1.html')
 
 @app.route('/logout')
 def logout():
@@ -267,6 +271,6 @@ def logout():
     # redirect user to front page
     flash('Signed Out!')
     return redirect('/')
-
+    
 if __name__ == "__main__":
     app.run(host='0.0.0.0',debug=True)

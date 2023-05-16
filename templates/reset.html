@@ -11,12 +11,12 @@ Reset
             <label for="codeInput">Confirm</label>
         </div> -->
         <div class="form-floating mb-3">
-            <input autofocus name="email" type="email" class="form-control" id="emailInput" required placeholder="name@example.com">
+            <input autofocus name="email" type="email" class="form-control" id="emailInput" placeholder="name@example.com">
             <label for="emailInput">Email</label>
         </div>
         <div class="d-grid gap-2">
-            <button type="submit" name="submit_button" value="confirm" class="btn btn-primary">Confirm</button>
-            <button type="submit" name="submit_button" value="resend" class="btn btn-primary mt-2">Resend Code</button>
+            <button type="submit" name="confirm" value="confirm" class="btn btn-primary">Confirm</button>
+            <button type="submit" name="resend" value="resend" class="btn btn-primary mt-2">Resend Code</button>
         </div>
     </form>
 </div>
@@ -30,7 +30,6 @@ Reset
     const alert = document.getElementById('alert')
     const form = document.getElementsByTagName('form')[0]
     const btnDiv = document.querySelector('.d-grid')
-    
 
     // set up the onload window to check
     document.addEventListener("DOMContentLoaded", function() {
@@ -38,56 +37,9 @@ Reset
         if (flash) {
             if (flash.innerHTML.trim() == 'New code has been sent to your Email!') {
                 console.log('hello')
-                }
-                
             }
         }
-    )
-
-    // check if we should start the countdown
-    let remainingTimeCookie = document.cookie.split("; ").filter(function(row) {
-        return row.includes('remainingTime=')
-    })[0]
-
-    if (remainingTimeCookie) {
-        let remainingTime = parseInt(remainingTimeCookie.split('=')[1])
-
-        startCountdown(remainingTime)
-    }
-
-    // function for the countdown
-    function startCountdown(remainingTime){
-        // if remainingTime is = falsy do the following: make the remaining time equal to 120, else set it to the value we pass
-        remainingTime = remainingTime || 10
-        resendBtn.setAttribute('disabled', '')
-
-        setTimeout(function() {
-            resendBtn.removeAttribute('disabled')
-            resendCheck = true;
-            // this line sets the ramainingTime till our function activates to be dynamic instead of the fixed 120000 or 120 seconds
-        }, remainingTime * 1000)
-
-        let timerInterval = setInterval(function(){
-            remainingTime--
-            document.cookie = `remainingTime=${remainingTime}; path=/reset;`
-            resendBtn.innerHTML = `Resend Code In ${remainingTime} seconds`
-
-            if (remainingTime == 0) {
-                clearInterval(timerInterval);
-                resendBtn.innerHTML = 'Resend New Code'
-                // destroy cookie
-                document.cookie = 'remainingTime=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/reset;';
-            }
-        }, 1000)
-    }
-    form.addEventListener('submit', function() {
-        // set the logic for the counter
-        let remainingTime = 10// "120"
-        document.cookie = `remainingTime=${remainingTime}}; path=/reset;`;
-        startCountdown()        
     })
-    
-        
 </script>
 <style>
     .gone {
