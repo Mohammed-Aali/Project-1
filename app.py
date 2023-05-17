@@ -212,14 +212,22 @@ def confirm():
 @app.route('/reset', methods=['GET', 'POST'])
 def reset():
     """ Resets password """
-    # make a response object
-    res = make_response(redirect("/reset"))
 
     # handles post
     if request.method == 'POST':
-        cookies = request.cookies
-        time_remaining = cookies.get('time_remaining')
-        print(time_remaining)
+        # set up variables
+        time_delta = cookies.get('time_delta')
+        email = request.form.get('email', None)
+        email_regex = r"^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$"
+
+        # check vairables
+        check_email_regexp = re.search(email_regex, str(email))
+
+        # confirm checks are good
+        if not check_email_regexp:
+            return apology("Invalid Email",'Valid Email')
+
+
         # handels the confirm button
         if request.form.get('confirm'):
             flash('confirm')
@@ -228,37 +236,30 @@ def reset():
 
         # handeles the reset button 
         elif request.form.get('resend'):
-           # do some stuff related to the time moduel
-            end_time = time.time() + 60
+            print('hello this is a resend request')
+            # do some stuff related to the time module
+            current_time = time.time()
+            timer = session.get('timer', 0)
+            time_delta = current_time - timer
             # set the cookie value
-            res.set_cookie(
-            'time_remaining',
-            value=f'{end_time}',
-            max_age=60,
-            expires=None,
-            path=request.path,
-            domain=None,
-            secure=False,
-            httponly=False)
-            return res
-        if time_delta < 60:
-            flash(f"You can only resend the code every 2 minutes. Please wait for {60 - int(time_delta)} seconds more.")
-            return redirect('/reset')
-        else: 
-            flash('else')
-            # first time set the value to the current time
-            session['timer'] = current_time
-            session['code'] = generate_code(6)
-            send_email(email, session.get('code'), 1)
-            flash("New code has been sent to your Email.")
-            return redirect('/reset')
+            if time_delta <= 120:
+                flash(f"You can only resend the code every 2 minutes. Please wait for {120 - int(time_delta)} seconds more.")
+                print(120 - int(time_delta))
+                return render_template('reset.html', time_delta= 120 - int(time_delta))
+            else: 
+                # first time set the value to the current time
+                session['timer'] = current_time
+                session['code'] = generate_code(6)
+                send_email(email, session.get('code'), 1)
+                flash("New code has been sent to your Email!")
+                return res
         # if the process is abandond for some reason 
         session.clear()
         flash('Oopsie! we have to try to reset the password again 😞')
-        return redirect('reset')
+        return redirect('/reset')
     # get request 
     else:
-        return render_template('reset.html')
+        return redirect('index.html')
 
 
 @app.route('/logout')

@@ -82,7 +82,7 @@ Confirm Code
             event.stopPropagation();
         } else if (buttonValue === 'resend' && !resendCheck) {
             event.preventDefault();
-            resendCodeCheck.innerHTML = "You need to wait For 1 minutes before resending the code"
+            resendCodeCheck.innerHTML = "You need to wait For 2 minutes before resending the code"
             resendCodeCheck.classList.add("d-block")
         }
     })
