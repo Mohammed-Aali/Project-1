@@ -4,22 +4,23 @@ Reset
 {% endblock %}
 {% block main %}
 <div class="container-fluid py-5 text-center" style="max-width: 350px;">
-    <div id="alert" class="alert alert-info"><p> We're sorry to hear that you forgot your password. Enter your email address below and click "Send Reset Code". </p></div>
+    <div id="alert" class="alert alert-info"><p> We're sorry to hear that you forgot your password. Enter your email address below and click "Confirm email". </p></div>
     <form action="{{ url_for('reset') }}" method="post" enctype="multipart/form-data" novalidate>
         <div class="form-floating mb-3">
             <input autofocus name="code" type="text" class="form-control gone" id="code" placeholder="Enter the 6 characters you received" maxlength="6" pattern="[A-Za-z0-9]{6}" autocomplete="off">
-            <label class='gone' for="code">Code</label>
-            <div id='codeCheck'class="invalid-feedback mt-1" role="alert">{{ msg }}</div>
+            <label id="codeLabel" class='gone' for="code">Code</label>
+            <div id='codeCheck' class="invalid-feedback mt-1" role="alert">{{ msg }}</div>
         </div>
         <div class="form-floating mb-3">
             <input autofocus name="email" type="email" class="form-control" required id="emailInput" placeholder="name@example.com">
-            <label for="emailInput">Email</label>
+            <label id="emailLabel" for="emailInput">Email</label>
             <div id='emailCheck'class="invalid-feedback" role="alert"></div>
         </div>
         <div class="d-grid gap-2">
-            <button type="submit" name="confirm" value="confirm" class="btn btn-primary gone">Confirm</button>
-            <button type="submit" name="resend" value="resend" class="btn btn-primary mt-2">Resend Code</button>
-            <div id='resendCodeCheck' role="alert"></div>
+            <button type="submit" name="confirmCode" value="confirmCode" class="btn btn-primary mt-2 gone" >Confirm Code</button>
+            <button type="submit" name="confirm" value="confirm" class="btn btn-primary">Confirm email</button>
+            <button type="submit" name="resend" value="resend" class="btn btn-primary mt-2 gone" >Resend Code</button>
+            <div id='resendCodeCheck' class='invalid-feedback' role="alert">{{ msg }}</div>
         </div>
         <input type="hidden" id="time_delta" value="{{ time_delta }}">
     </form>
@@ -27,7 +28,10 @@ Reset
 <script>
     // set up variables
     const confirmBtn = document.querySelector("button[value='confirm']")
+    const codeBtn = document.querySelector('button[value="confirmCode"]')
     const code = document.querySelector('#code')
+    const emailLabel = document.querySelector('#emailLabel')
+    const codeLabel = document.querySelector('#codeLabel')
     const codeCheck = document.querySelector('#codeCheck')
     const email = document.querySelector('#emailInput')
     const emailCheck = document.querySelector('#emailCheck')
@@ -36,22 +40,72 @@ Reset
     const alert = document.getElementById('alert')
     const form = document.getElementsByTagName('form')[0]
     const btnDiv = document.querySelector('.d-grid')
-    let timeDelta = localStorage.getItem('timeDelta') || 120;
+    let timeDelta = sessionStorage.getItem('timeDelta');
     let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/
+    let regExp = /^[0-9a-zA-Z]{6}$/
     let checkEmail;
     let resendCheck= false;
+    console.log(codeCheck)
 
     // set up the onload window to check
     document.addEventListener("DOMContentLoaded", function() {
         let flash = document.getElementById('flash')
-        if (flash) {
-            if (flash.innerHTML.trim() == 'New code has been sent to your Email!') {
-                console.log('hello')
-            }
+        let pattern = /You can only resend the code every 2 minutes\. Please wait for (-?\d+) seconds more\./;
+        let sentance = 'You can only resend the code every 2 minutes. Please wait for 00 seconds more.'
+        let match = sentance.match(pattern);
+        if (flash && flash.innerHTML.trim() == 'New code has been sent to your Email!' || match || codeCheck.innerHTML.trim() == 'Incorrect Code!') {
+            // magically gone
+            emailLabel.classList.add('gone')
+            email.classList.add('gone')
+            confirmBtn.classList.add('gone')
+            // magically appear
+            code.classList.remove('gone')
+            codeLabel.classList.remove('gone')
+            codeBtn.classList.remove('gone')
+            resendBtn.classList.remove('gone')
+            alert.innerHTML = 'We have sent you an email to confirm your reset password. Enter the code you received in the box below and click "Confirm Code"'
+
+            // add a d-block
+            codeCheck.classList.add('d-block')
         }
-        console.log(timeDelta)
+        if (resendCodeCheck.innerHTML.trim() === "The Email you entered does not exist.") {
+            resendCodeCheck.classList.add('d-block');
+        }
+        console.log(codeCheck.innerHTML)
+    })
+    // add event listener to check for characters
+    code.addEventListener('input', function(event) {
+        codeIn = event.target.value
+        if(!regExp.test(codeIn)) {
+            codeCheck.innerHTML = 'Code Must be 6 characters';
+            codeCheck.classList.add("d-block")
+        } else {
+            codeCheck.className = codeCheck.className.replace('d-block', 'gone')
+        }
     })
 
+    // count related stuff
+    let remainingTime = timeDelta || 120
+    resendBtn.setAttribute('disabled', '')
+    // to enable the button after two minutes has passed
+    setTimeout(function() {
+        resendBtn.removeAttribute('disabled')
+        resendCheck = true;
+        sessionStorage.removeItem('timeDelta')
+    }, remainingTime * 1000)
+
+    let timerInterval = setInterval(function() {
+        remainingTime--
+        resendBtn.innerHTML = `Resend Code In ${remainingTime} seconds`
+        sessionStorage.setItem('timeDelta', remainingTime)
+
+        if (remainingTime <= 0 ) {
+            clearInterval(timerInterval)
+            sessionStorage.removeItem('timeDelta')
+            resendBtn.innerHTML = '<span>Resend New Code</span>'
+        }
+    }, 1000)
+        
     // check for email
     email.addEventListener('input', event => {
         checkEmail = true
@@ -66,107 +120,11 @@ Reset
     })
     // form check
     form.addEventListener('submit', event => {
-        event.preventDefault()
         let button = event.submitter.value
-        if (button === 'resend' && !checkEmail) {
-        form.classList.add("was-validated");
-        event.stopPropagation();
-        } else if (button === 'resend') {
-        console.log('send an email')
-        // set the logic for the counter
-        let remainingTime = timeDelta;
-        resendBtn.setAttribute('disabled', '')
-
-        // to enable the button after two minutes has passed
-        setTimeout(function() {
-            resendBtn.removeAttribute('disabled')
-            resendCheck = true;
-            localStorage.removeItem('timeDelta')
-        }, remainingTime * 1000)
-
-        let timerInterval = setInterval(function() {
-            remainingTime--
-            resendBtn.innerHTML = `Resend Code In ${remainingTime} seconds`
-            localStorage.setItem('timeDelta', remainingTime)
-
-            if (remainingTime == 0) {
-            clearInterval(timerInterval)
-            resendBtn.innerHTML = '<span>Resend New Code</span>'
-            }
-        }, 1000)
-
-        fetch('reset', {method:'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({email: email.value})})
-        .then(response => {
-            // check the status code of the response
-            if (response.ok) {
-                // if the status code is 200-299, return the response as JSON
-                return response.json()
-            } else {
-                // if the status code is not 200-299, throw an error with the status text
-                throw new Error(response.statusText)
-            }
-            })
-            .then(data => {
-            console.log(data)
-            if(data.success) {
-                resendCodeCheck.innerHTML = '<span style="color: green;">New code has been sent to your Email!</span>'
-            } else {
-                resendCodeCheck.innerHTML = '<span style="color: red;">Something went wrong. Please try again later.</span>'
-            }
-            }).catch(error => {
-            console.error(error)
-            resendCodeCheck.innerHTML = '<span style="color: red;">Something went wrong. Please try again later.</span>'
-        })
-    }})
-
-    // let formData = new FormData(form);
-    // let user_url = `${SCRIPT_ROOT}/reset`
-    // fetch(user_url, {method: 'POST', body: formData}).then(response => {
-    //     if (response.ok) {
-    //         return response.json();
-    //     } else {
-    //         throw new Error('Something went Wrong')
-    //     }
-    // }).catch(error => {
-    //     console.error(error)
-    //     alert(error.message)
-    // })
-
-    // // set the logic for the counter
-    // let remainingTime = timeDelta || 120;
-    // resendBtn.setAttribute('disabled', '')
-
-    // // to enable the button after two minutes has passed
-    // setTimeout(function() {
-    //     resendBtn.removeAttribute('disabled')
-    //     resendCheck = true;
-    // }, remainingTime * 1000)
-
-    // let timerInterval = setInterval(function() {
-    //     remainingTime--
-    //     resendBtn.innerHTML = `Resend Code In ${remainingTime} seconds`
-
-    //     if (remainingTime == 0) {
-    //         clearInterval(timerInterval)
-    //         resendBtn.innerHTML = '<span>Resend New Code</span>'
-    //     }
-    // }, 1000)
-
-
-    
-
-    // // form check
-    // form.addEventListener('submit', event => {
-    //     let button = event.submitter.value
-    //     if (button === 'resend' && !checkEmail)
-    //     {
-    //         form.classList.add("was-validated");
-    //         event.preventDefault();
-    //         event.stopPropagation();
-    //     } else if (button === 'resend') {
-    //         console.log('send an email')
-    //     }
-    // })
+        if ( button == 'resend') {
+            console.log('this is our boy')
+        }
+    })
 </script>
 <style>
     .gone {
