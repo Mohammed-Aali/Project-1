@@ -7,22 +7,22 @@ Reset
     <div id="alert" class="alert alert-info"><p> We're sorry to hear that you forgot your password. Enter your email address below and click "Confirm email". </p></div>
     <form action="{{ url_for('reset') }}" method="post" enctype="multipart/form-data" novalidate>
         <div class="form-floating mb-3">
-            <input autofocus name="code" type="text" class="form-control gone" id="code" placeholder="Enter the 6 characters you received" maxlength="6" pattern="[A-Za-z0-9]{6}" autocomplete="off">
-            <label id="codeLabel" class='gone' for="code">Code</label>
-            <div id='codeCheck' class="invalid-feedback mt-1" role="alert">{{ msg }}</div>
-        </div>
-        <div class="form-floating mb-3">
             <input autofocus name="email" type="email" class="form-control" required id="emailInput" placeholder="name@example.com">
             <label id="emailLabel" for="emailInput">Email</label>
             <div id='emailCheck'class="invalid-feedback" role="alert"></div>
         </div>
+        <div class="form-floating mb-3">
+            <input autofocus name="code" type="text" class="form-control gone" id="code" placeholder="Enter the 6 characters you received" maxlength="6" pattern="[A-Za-z0-9]{6}" autocomplete="off">
+            <label id="codeLabel" class='gone' for="code">Code</label>
+            <div id='codeCheck' class="invalid-feedback mt-1" role="alert">{{ msg }}</div>
+        </div>
+
         <div class="d-grid gap-2">
             <button type="submit" name="confirmCode" value="confirmCode" class="btn btn-primary mt-2 gone" >Confirm Code</button>
             <button type="submit" name="confirm" value="confirm" class="btn btn-primary">Confirm email</button>
             <button type="submit" name="resend" value="resend" class="btn btn-primary mt-2 gone" >Resend Code</button>
             <div id='resendCodeCheck' class='invalid-feedback' role="alert">{{ msg }}</div>
         </div>
-        <input type="hidden" id="time_delta" value="{{ time_delta }}">
     </form>
 </div>
 <script>
@@ -53,7 +53,7 @@ Reset
         let pattern = /You can only resend the code every 2 minutes\. Please wait for (-?\d+) seconds more\./;
         let sentance = 'You can only resend the code every 2 minutes. Please wait for 00 seconds more.'
         let match = sentance.match(pattern);
-        if (flash && flash.innerHTML.trim() == 'New code has been sent to your Email!' || match || codeCheck.innerHTML.trim() == 'Incorrect Code!') {
+        if (flash.innerHTML.trim() == 'New code has been sent to your Email!' || match || codeCheck.innerHTML.trim() == 'Incorrect Code!') {
             // magically gone
             emailLabel.classList.add('gone')
             email.classList.add('gone')

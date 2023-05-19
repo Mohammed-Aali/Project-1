@@ -271,6 +271,7 @@ def reset():
                 flash(f"You can only resend the code every 2 minutes. Please wait for {120 - int(time_delta)} seconds more.")
                 print(120 - int(time_delta))
                 return render_template('reset.html', time_delta= 120 - int(time_delta))
+                print('this code block has executed')
             else: 
                 # first time set the value to the current time
                 session['timer'] = current_time
