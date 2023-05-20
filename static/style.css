@@ -1,12 +1,50 @@
-/* @media (min-width: 576px) { 
+html {
+    height: 100%;
+}
 
+body {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+footer {
+    margin-top: auto;
+}
+/* index page */
+/* .main {
+    display: flex;
+    border: 1px solid red;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-img {
+    max-width: 50vh;
+    height: auto;
+}
+
+.content-left {
+    width: 40%;
+}
+
+.main h1 {
+    font-size: 54px;
+    color: #133b4f;
+    text-transform: uppercase;
+}
+
+.main h2 {
+    font-size: 25px;
+    color: #fca70c;
+    text-transform: uppercase;
+    letter-spacing: 8px;
+}
+
+.main p {
+    font-size: 14px;
+    color: #333;
+    line-height: 31px;
+    margin: 30px 0;
 } */
-
-/* Medium devices (tablets, 768px and up)
-@media (min-width: 768px) { ... }
-
-/* // Large devices (desktops, 992px and up) */
-/* @media (min-width: 992px)  */
-
-/* // Extra large devices (large desktops, 1200px and up) */
-/* @media (min-width: 1200px) */

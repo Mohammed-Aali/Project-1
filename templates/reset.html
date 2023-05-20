@@ -12,7 +12,7 @@ Reset
             <div id='emailCheck'class="invalid-feedback" role="alert"></div>
         </div>
         <div class="form-floating mb-3">
-            <input autofocus name="code" type="text" class="form-control gone" id="code" placeholder="Enter the 6 characters you received" maxlength="6" pattern="[A-Za-z0-9]{6}" autocomplete="off">
+            <input autofocus name="code" type="text" class="form-control gone" id="code" placeholder="Enter the 6 characters you received" minlength="6" maxlength="6" pattern="[A-Za-z0-9]{6}" autocomplete="off">
             <label id="codeLabel" class='gone' for="code">Code</label>
             <div id='codeCheck' class="invalid-feedback mt-1" role="alert">{{ msg }}</div>
         </div>
@@ -53,7 +53,7 @@ Reset
         let pattern = /You can only resend the code every 2 minutes\. Please wait for (-?\d+) seconds more\./;
         let sentance = 'You can only resend the code every 2 minutes. Please wait for 00 seconds more.'
         let match = sentance.match(pattern);
-        if (flash.innerHTML.trim() == 'New code has been sent to your Email!' || match || codeCheck.innerHTML.trim() == 'Incorrect Code!') {
+        if ((flash.innerHTML.trim() == 'New code has been sent to your Email!') || match || codeCheck.innerHTML.trim() == 'Incorrect Code!') {
             // magically gone
             emailLabel.classList.add('gone')
             email.classList.add('gone')
@@ -67,6 +67,20 @@ Reset
 
             // add a d-block
             codeCheck.classList.add('d-block')
+        } else {
+            // reset everything
+            // magically reappear
+            emailLabel.classList.remove('gone')
+            email.classList.remove('gone')
+            confirmBtn.classList.remove('gone')
+            // magically gone
+            code.classList.add('gone')
+            codeLabel.classList.add('gone')
+            codeBtn.classList.add('gone')
+            resendBtn.classList.add('gone')
+
+            // add a d-block
+            codeCheck.classList.remove('d-block')
         }
         if (resendCodeCheck.innerHTML.trim() === "The Email you entered does not exist.") {
             resendCodeCheck.classList.add('d-block');

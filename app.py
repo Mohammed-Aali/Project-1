@@ -268,7 +268,7 @@ def reset():
             time_delta = current_time - timer
             # set the cookie value
             if time_delta <= 120:
-                flash(f"You can only resend the code every 2 minutes. Please wait for {120 - int(time_delta)} seconds more.")
+                flash(f"You can only resend the code every 2 minutes. Please wait for <span>{120 - int(time_delta)}</span> seconds more.")
                 print(120 - int(time_delta))
                 return render_template('reset.html', time_delta= 120 - int(time_delta))
                 print('this code block has executed')
@@ -278,7 +278,7 @@ def reset():
                 session['code'] = generate_code(6)
                 send_email(email, session.get('code'), 1)
                 flash("New code has been sent to your Email!")
-                return redirect('/rest')
+                return redirect('/reset')
 
         # handle the confirm button
         elif request.form.get('confirmCode'):
@@ -288,6 +288,7 @@ def reset():
             msg = 'Incorrect Code!'
 
             if (str(code.lower()) != str(confirm_code.lower())):
+                print('here')
                 return render_template('reset.html', msg=msg)
 
             return redirect("/reset")
@@ -298,7 +299,7 @@ def reset():
         return redirect('/reset')
     # get request 
     else:
-        return render_template('reset.html')
+        return render_template('index.html')
 
 
 @app.route('/logout')
