@@ -41,9 +41,20 @@ footer {
     line-height: 31px;
     margin: 30px 0;
 } 
+/* javascript scroller */
+.swiper {
+    height: 500px;
+}
 
+.swiper-slide {
+    background: #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+}
 /* the scroller part */
-.media-scroller {
+/* .media-scroller {
     --_spacer: 1rem;
     display: grid;
     gap: var(--_spacer);
@@ -80,4 +91,4 @@ footer {
     inline-size: 100%;
     aspect-ratio: 16 / 9;
     object-fit: cover;
-}
+} */
