@@ -3,95 +3,89 @@
 Home
 {% endblock %}
 {% block main %}
-<div class="main container mt-2">
+<div class="main container">
     <div class="row align-items-center">
         <div class="content-left col">
-            <h1>Hi, I'm Mohammed Ali</h1>
-            <h2>I create <em>user-friendly</em> websites as a hobbie using HTML, CSS, Javascript.</h2>
-            <button class="btn btn-primary mt-3" title="see my projects">See my projects!</button>
+            <h1 class="main-content">Hi, I'm Mohammed Ali</h1>
+            <h2 class="main-content">I create user-friendly websites as a hobbie using HTML, CSS, Javascript.</h2>
+            <button class="btn btn-primary my-3 main-content" title="see my projects">See my projects!</button>
         </div>
         <div class="content-right col">
             <img src="/static/images/anime_final.png" class="img-fluid" alt="Happy laptop users" title="animated image of website creater">
         </div>
     </div> 
 </div>
-<div class="continer my-3">
-    <div class="row align-items-center">
-        <div class="col-4 first-col">
-            hello 
-        </div>
-        <div class="col-4 second-col">
-            this is my 
-        </div>
-        <div class="col-4 third-col">
-            three col layout
-        </div>
+<div class="container">
+    <div class="row text-center">
+      <div class="col">
+        1 of 3
+      </div>
+      <div class="col">
+        2 of 3
+      </div>
+      <div class="col">
+        3 of 3
+      </div>
     </div>
 </div>
 
 <!-- scroller design in javascript swiper -->
-<!-- <div class="container"> -->
-    <!-- Slider main container -->
-     <!-- Swiper -->
-    <div class="swiper mySwiper mb-2">
+<section class="main-3">
+    <h2 class="text-center my-3">My Projects</h2>
+    <div class="swiper mySwiper my-2">
         <div class="swiper-wrapper">
-        <div class="swiper-slide">Slide 1</div>
-        <div class="swiper-slide">Slide 2</div>
-        <div class="swiper-slide">Slide 3</div>
-        <div class="swiper-slide">Slide 4</div>
-        <div class="swiper-slide">Slide 5</div>
-        <div class="swiper-slide">Slide 6</div>
-        <div class="swiper-slide">Slide 7</div>
-        <div class="swiper-slide">Slide 8</div>
-        <div class="swiper-slide">Slide 9</div>
+            <div class="swiper-slide">
+                <img src="/static/images/coming_soon.jpg" class="img-fluid" alt="cooming soon" title="cooming soon">
+            </div>
+            <div class="swiper-slide">
+                <img src="/static/images/coming_soon.jpg" class="img-fluid" alt="cooming soon" title="cooming soon">
+            </div>
+            <div class="swiper-slide">
+                <img src="/static/images/coming_soon.jpg" class="img-fluid" alt="cooming soon" title="cooming soon">
+            </div>
+            <div class="swiper-slide">
+                <img src="/static/images/coming_soon.jpg" class="img-fluid" alt="cooming soon" title="cooming soon">
+            </div>
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-pagination"></div>
     </div>
-    <div class="swiper-button-next"></div>
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-pagination"></div>
-  </div>
-<!-- </div> -->
+</section>
 
-<!-- <div class="continer mt-3 py-3 media-scroller snaps-inline">
-    <div class="media-element">
-        <img src="/static/images/pexels-vie-studio-4439444 (2).jpg" alt="Coming Soon" title="coming soon">
-        <p class="title">Coming Soon</p>
-    </div>
-    <div class="media-element">
-        <img src="/static/images/pexels-vie-studio-4439444 (2).jpg" alt="Coming Soon" title="coming soon">
-        <p class="title">Coming Soon</p>
-    </div>
-    <div class="media-element">
-        <img src="/static/images/pexels-vie-studio-4439444 (2).jpg" alt="Coming Soon" title="coming soon">
-        <p class="title">Coming Soon</p>
-    </div>
-    <div class="media-element">
-        <img src="/static/images/pexels-vie-studio-4439444 (2).jpg" alt="Coming Soon" title="coming soon">
-        <p class="title">Coming Soon</p>
-    </div>
-    <div class="media-element">
-        <img src="/static/images/pexels-vie-studio-4439444 (2).jpg" alt="Coming Soon" title="coming soon">
-        <p class="title">Coming Soon</p>
-    </div>
-</div> -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
 <script>
     var swiper = new Swiper(".mySwiper", {
     effect: "coverflow",
-      grabCursor: true,
+    //   grabCursor: true,
       loop: true,
       centeredSlides: true,
-      slidesPerView: "auto",
+      slidesPerView: 2,
       coverflowEffect: {
-        rotate: 50,
+        rotate: 30,
         stretch: 0,
         depth: 100,
-        modifier: 1,
+        modifier: 2,
         slideShadows: true,
+      },
+      breakpoints: {
+        // when window width is >= 320px
+            320: {
+            slidesPerView: 1,
+            },
+            // when window width is >= 480px
+            480: {
+            slidesPerView: 1,
+            },
+            // when window width is >= 640px
+            640: {
+            slidesPerView: 2,
+        }
       },
       keyboard: {
         enabled: true,
       },
-      slidesPerView: 3,
+      
       pagination: {
         el: ".swiper-pagination",
         dynamicBullets: true,
