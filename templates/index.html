@@ -3,7 +3,8 @@
 Home
 {% endblock %}
 {% block main %}
-<div class="main container">
+<section class="main py-2">
+  <div class="container">
     <div class="row align-items-center">
         <div class="content-left col">
             <h1 class="main-content">Hi, I'm Mohammed Ali</h1>
@@ -11,40 +12,45 @@ Home
             <button class="btn btn-primary my-3 main-content" title="see my projects">See my projects!</button>
         </div>
         <div class="content-right col">
-            <img src="/static/images/anime_final.png" class="img-fluid" alt="Happy laptop users" title="animated image of website creater">
+            <img src="/static/images/me.png" class="img-fluid" alt="Happy laptop users" title="animated image of website creater">
         </div>
     </div> 
-</div>
-<div class="container">
+  </div>
+</section>
+
+<section class="main2">
+  <div class="container">
     <div class="row text-center">
       <div class="col">
-        1 of 3
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque reprehenderit nemo saepe fugit necessitatibus amet error quae exercitationem, illum voluptatum iusto molestiae numquam obcaecati accusantium libero quod, quo perspiciatis hic.
       </div>
-      <div class="col">
+      <!-- <div class="col">
         2 of 3
       </div>
       <div class="col">
         3 of 3
-      </div>
+      </div> -->
     </div>
-</div>
+  </div>
+</section>
+
 
 <!-- scroller design in javascript swiper -->
-<section class="main-3">
-    <h2 class="text-center my-3">My Projects</h2>
+<section class="main3 box">
+    <h2 class="text-center">My Projects</h2>
     <div class="swiper mySwiper my-2">
         <div class="swiper-wrapper">
             <div class="swiper-slide">
-                <img src="/static/images/coming_soon.jpg" class="img-fluid" alt="cooming soon" title="cooming soon">
+                <img src="/static/images/CatAlog.png" class="img-fluid" alt="3ffectx.com" title="Project">
             </div>
             <div class="swiper-slide">
-                <img src="/static/images/coming_soon.jpg" class="img-fluid" alt="cooming soon" title="cooming soon">
+                <img src="/static/images/coming-soon.jpg" class="img-fluid" alt="cooming soon" title="cooming soon">
             </div>
             <div class="swiper-slide">
-                <img src="/static/images/coming_soon.jpg" class="img-fluid" alt="cooming soon" title="cooming soon">
+                <img src="/static/images/coming-soon.jpg" class="img-fluid" alt="cooming soon" title="cooming soon">
             </div>
             <div class="swiper-slide">
-                <img src="/static/images/coming_soon.jpg" class="img-fluid" alt="cooming soon" title="cooming soon">
+                <img src="/static/images/coming-soon.jpg" class="img-fluid" alt="cooming soon" title="cooming soon">
             </div>
         </div>
         <div class="swiper-button-next"></div>
@@ -68,14 +74,11 @@ Home
         modifier: 2,
         slideShadows: true,
       },
+      breakpointsInverse: true,
       breakpoints: {
         // when window width is >= 320px
-            320: {
-            slidesPerView: 1,
-            },
-            // when window width is >= 480px
-            480: {
-            slidesPerView: 1,
+            00: {
+              slidesPerView: 1,
             },
             // when window width is >= 640px
             640: {

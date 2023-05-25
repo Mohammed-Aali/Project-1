@@ -1,3 +1,6 @@
+*,*::after, *::before {
+    box-sizing: border-box;
+}
  :root {
     --purple-blue: #681fef;
     --lavender-cream: #c8a8f2;
@@ -6,17 +9,22 @@
     --exotic-lilac: #d09ab8;
     --nople-plum: #7f197f;
     --orange: #fca70c;
+    --bg-color: #fff;
 }
 
 html {
     height: 100%;
+    color-scheme: dark light;
 }
 
 body {
+    color: white;
     min-height: 100%;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     display: flex;
     flex-direction: column;
+    margin: 0;
+    line-height: 1.5rem;
 }
 
 footer {
@@ -27,10 +35,109 @@ footer {
     margin-top: auto;
 }
 /* index page */
-
+/* Keven Powell { Spice up your site | Easy waves, angles, & othe creative shapes with CSS} {https://youtu.be/hWGgw1K-i8Y} */
 .main {
+    --skew-angle: -3deg;
+    position: relative;
+    isolation: isolate;
+    margin-bottom: -3rem;
     display: flex;
 }
+
+.main::after {
+    content: "";
+    background-image: linear-gradient(
+        45deg,
+        var(--acai-juice),
+        var(--nople-plum),
+        var(--purple-blue)
+    );
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    transform: skewY(var(--skew-angle));
+}
+
+.main2 {
+	background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+    z-index: -100;
+    padding-top: 10rem;
+    padding-bottom: 10rem;
+
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+
+/* .main2 {
+    --spike-color: var(--bg-color);
+    --spike-width: 50px;
+    --spike-height: 10px;
+    position: relative;
+    color: black;
+    background: linear-gradient(
+        to right,
+        var(--exotic-lilac),
+        var(--lavender-cream)
+    );
+}
+
+.main2::before, .main2::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: var(--spike-height);
+    background: var(--spike-color);
+    -webkit-mask-image: url(/static/images/spike.svg);
+    -webkit-mask-size: var(--spike-width) var(--spike-height);
+    mask-image: url(/static/images/spike.svg);
+    mask-size: var(--spike-width) var(--spike-height);
+}
+
+.main2::before{
+    top: 0;
+}
+.main2::after{
+    bottom: 0;
+    transform: rotate(180deg);
+} */
+
+.main3 {
+    background: linear-gradient(
+        to right,
+        var(--lavender-cream),
+        var(--lavender-cream)
+    );
+    padding: 3rem 0;
+    margin-top: -3rem ;
+}
+
+.box {
+    --mask:
+      radial-gradient(50.40px at 50% 70.50px,#000 99%,#0000 101%) calc(50% - 60px) 0/120px 51% repeat-x,
+      radial-gradient(50.40px at 50% -40.5px,#0000 99%,#000 101%) 50% 30px/120px calc(51% - 30px) repeat-x,
+      radial-gradient(50.40px at 50% calc(100% - 70.50px),#000 99%,#0000 101%) calc(50% - 60px) 100%/120px 51% repeat-x,
+      radial-gradient(50.40px at 50% calc(100% + 40.50px),#0000 99%,#000 101%) 50% calc(100% - 30px)/120px calc(51% - 30px) repeat-x;
+    -webkit-mask: var(--mask);
+            mask: var(--mask);
+  }
+
+.content-right img {
+    margin-bottom: 2rem;
+}
+
 .content-left h1{
     font-size: 50px;
     color: #fca70c;
@@ -40,7 +147,7 @@ footer {
 .content-left h2 {
     font-size: 20px;
     line-height: 30px;
-    color: var(--exotic-lilac);
+    color: white;
 }
 
 .content-left button {
@@ -63,12 +170,18 @@ footer {
 }
 
 .swiper-slide {
+    cursor: pointer;
     background: #ccc;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 60px;
 } 
+
+.swiper-slide:hover {
+    box-shadow: 0 .5rem 0.75rem -.25em rgba(0, 0, 0, .3);
+}
+
+
 
 /* // `sm` applies to x-small devices (portrait phones, less than 576px) */
 @media (max-width: 575.98px) { 
