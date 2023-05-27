@@ -22,14 +22,11 @@ Home
   <div class="container">
     <div class="row text-center">
       <div class="col">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque reprehenderit nemo saepe fugit necessitatibus amet error quae exercitationem, illum voluptatum iusto molestiae numquam obcaecati accusantium libero quod, quo perspiciatis hic.
+        <div class="alert alert-light meow" role="alert">
+          meow
+        </div>
+        <img id="cat" src="/static/images/cat.png" alt="cat" title="Cat image">
       </div>
-      <!-- <div class="col">
-        2 of 3
-      </div>
-      <div class="col">
-        3 of 3
-      </div> -->
     </div>
   </div>
 </section>
@@ -58,9 +55,34 @@ Home
         <div class="swiper-pagination"></div>
     </div>
 </section>
-
 <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
 <script>
+  const cat = document.querySelector('#cat')
+  const button = document.querySelector(".btn")
+  button.addEventListener('click', event => {
+    console.log('clicked')
+  })
+  cat.addEventListener('click', function(e) {
+    console.log('clicked!');
+  });
+  document.addEventListener('DOMContentLoaded', function() {
+  const cat = document.querySelector('#cat');
+  const button = document.querySelector(".btn");
+
+  console.log('DOMContentLoaded fired');
+
+  button.addEventListener('click', event => {
+    console.log('button clicked');
+  });
+
+  cat.addEventListener('click', function(e) {
+    console.log('cat clicked!');
+  });
+
+  console.log('Event listeners attached');
+});
+
+
     var swiper = new Swiper(".mySwiper", {
     effect: "coverflow",
     //   grabCursor: true,
@@ -91,7 +113,7 @@ Home
       
       pagination: {
         el: ".swiper-pagination",
-        dynamicBullets: true,
+        // dynamicBullets: true,
       },
       navigation: {
         nextEl: ".swiper-button-next",
