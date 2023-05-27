@@ -21,11 +21,15 @@ Home
 <section class="main2">
   <div class="container">
     <div class="row text-center">
-      <div class="col">
+      <div id="firstCol" class="col">
         <div class="alert alert-light meow" role="alert">
-          meow
+          Click on the slides below, plz
         </div>
         <img id="cat" src="/static/images/cat.png" alt="cat" title="Cat image">
+      </div>
+      <div id="secondCol" class="col">
+        <!-- <h1>Back end</h1>
+        <p>I used Python Flask, to make the web application dynamic. I also used SQLite3, relational database management for storing the data securely. I used the CS50 library to connect to the SQLite3 database and interact with it effectively.</p> -->
       </div>
     </div>
   </div>
@@ -34,19 +38,19 @@ Home
 
 <!-- scroller design in javascript swiper -->
 <section class="main3 box">
-    <h2 class="text-center">My Projects</h2>
+    <h2 class="text-center py-2">My Projects</h2>
     <div class="swiper mySwiper my-2">
         <div class="swiper-wrapper">
-            <div class="swiper-slide">
+            <div id="slide1" class="swiper-slide">
                 <img src="/static/images/CatAlog.png" class="img-fluid" alt="3ffectx.com" title="Project">
             </div>
-            <div class="swiper-slide">
+            <div id="slide2" class="swiper-slide">
                 <img src="/static/images/coming-soon.jpg" class="img-fluid" alt="cooming soon" title="cooming soon">
             </div>
-            <div class="swiper-slide">
+            <div id="slide3" class="swiper-slide">
                 <img src="/static/images/coming-soon.jpg" class="img-fluid" alt="cooming soon" title="cooming soon">
             </div>
-            <div class="swiper-slide">
+            <div id="slide4" class="swiper-slide">
                 <img src="/static/images/coming-soon.jpg" class="img-fluid" alt="cooming soon" title="cooming soon">
             </div>
         </div>
@@ -57,68 +61,80 @@ Home
 </section>
 <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
 <script>
-  const cat = document.querySelector('#cat')
-  const button = document.querySelector(".btn")
-  button.addEventListener('click', event => {
-    console.log('clicked')
+  const cat = document.getElementById("cat")
+  const sliders = document.querySelectorAll('.swiper-slide')
+  const firstCol = document.querySelector('#firstCol')
+  const secondCol = document.querySelector('#secondCol')
+  let previousSlideId = null;
+  let toggleState = false;
+  slidersInfo = [{id: 'slide1',title1: 'Front End', title2: 'Back End', paragraph1: "I used <i class='bi bi-filetype-html'></i> for structure, <i class='bi bi-filetype-css'></i> for layout and appearance, <i class='bi bi-bootstrap'></i> for responsiveness, and <i class='bi bi-filetype-js'></i> for interactivity. I used Swiper JavaScript, for the sliders, to showcase my portfolio and projects.", paragraph2: "I used <i class='bi bi-filetype-py'></i> Flask, to make the web application dynamic. I also used SQLite3 for storing the data securely. I used the CS50 library to connect to the SQLite3 database and interact with it effectively."}, {id: 'slide2',title1: 'Undecided', title2: 'Undecided', paragraph1: 'Coming soon. This tap should also be a website, If it is not then I will change the front end title for it to make sence, but till then 👻.', paragraph2: 'This section should describe the details of the back end of the "coming soon" website, right now its lonely since I have not created another website :"(.'}, {id: "slide3", title1: 'To be determined', title2: 'To be determined',paragraph1: "This should be filled out soon enough, tbh I had this amount of slides so that the site does not look off. Hope you enjoyed given me a free therapy session, lol.", paragraph2: 'If you have any ideas for stuff you would like to buil or need some help building hmu.'}, {id: "slide4", title1: 'Pending approval', title2: 'Pending approval',paragraph1: "The good thing about what I am doing currently is that the only approval I need is from myself, thankfully I am very easy to convince.", paragraph2: 'I have this quete that I really like:<p p dir="rtl" lang="ar">فَلا تَقنَع بِما دونَ النُجومِ إِذا غامَرتَ في شَرَفٍ مَرومٍ</p> <p p dir="rtl" lang="ar" >كَطَعمِ المَوتِ في أَمرٍ عَظيمِ فَطَعمُ المَوتِ في أَمرٍ صَغيرٍ</p> '}]
+  console.log(toggleState)
+  sliders.forEach(slide => {
+    slide.addEventListener('click', event => {
+      let slideId = slide.getAttribute('id')
+      for (let i = 0; i < slidersInfo.length; i++)
+      {
+        if (slidersInfo[i].id == slideId) {
+          if (toggleState) {
+            firstCol.innerHTML = `<div class="alert alert-light meow" role="alert">
+              Click on the slides below, plz
+            </div>
+            <img id="cat" src="/static/images/cat.png" alt="cat" title="Cat image">`
+            firstCol.style.borderRight = ''
+            secondCol.innerHTML = ''
+            previousSlideId = slidersInfo[i].id
+            toggleState = false;
+
+          } else if (previousSlideId == slidersInfo[i].id)  {
+            firstCol.innerHTML = `<h1 class='text-start'>${slidersInfo[i].title1}</h1>
+            <p class='text-start'>${slidersInfo[i].paragraph1}</p>`
+            firstCol.style.borderRight='2px solid var(--orange)'
+            secondCol.innerHTML = `<h1 class='text-start'>${slidersInfo[i].title1}</h1>
+            <p class='text-start'>${slidersInfo[i].paragraph2}</p>`
+            toggleState = true;
+          } 
+          
+        } 
+      }
+    }) 
   })
-  cat.addEventListener('click', function(e) {
-    console.log('clicked!');
+  // swiper related code
+  var swiper = new Swiper(".mySwiper", {
+  effect: "coverflow",
+  //   grabCursor: true,
+    loop: true,
+    centeredSlides: true,
+    slidesPerView: 2,
+    coverflowEffect: {
+      rotate: 30,
+      stretch: 0,
+      depth: 100,
+      modifier: 2,
+      slideShadows: true,
+    },
+    breakpointsInverse: true,
+    breakpoints: {
+      // when window width is >= 320px
+          00: {
+            slidesPerView: 1,
+          },
+          // when window width is >= 640px
+          640: {
+          slidesPerView: 2,
+      }
+    },
+    keyboard: {
+      enabled: true,
+    },
+    
+    pagination: {
+      el: ".swiper-pagination",
+      // dynamicBullets: true,
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
   });
-  document.addEventListener('DOMContentLoaded', function() {
-  const cat = document.querySelector('#cat');
-  const button = document.querySelector(".btn");
-
-  console.log('DOMContentLoaded fired');
-
-  button.addEventListener('click', event => {
-    console.log('button clicked');
-  });
-
-  cat.addEventListener('click', function(e) {
-    console.log('cat clicked!');
-  });
-
-  console.log('Event listeners attached');
-});
-
-
-    var swiper = new Swiper(".mySwiper", {
-    effect: "coverflow",
-    //   grabCursor: true,
-      loop: true,
-      centeredSlides: true,
-      slidesPerView: 2,
-      coverflowEffect: {
-        rotate: 30,
-        stretch: 0,
-        depth: 100,
-        modifier: 2,
-        slideShadows: true,
-      },
-      breakpointsInverse: true,
-      breakpoints: {
-        // when window width is >= 320px
-            00: {
-              slidesPerView: 1,
-            },
-            // when window width is >= 640px
-            640: {
-            slidesPerView: 2,
-        }
-      },
-      keyboard: {
-        enabled: true,
-      },
-      
-      pagination: {
-        el: ".swiper-pagination",
-        // dynamicBullets: true,
-      },
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-    });
 </script>
 {% endblock %}

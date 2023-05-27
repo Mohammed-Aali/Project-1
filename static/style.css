@@ -90,6 +90,17 @@ footer {
 	}
 }
 
+#firstCol h1, #secondCol h1 {
+    font-size: 1.75rem;
+    color: black;
+    font-weight: bold;
+}
+
+#firstCol p, #secondCol p  {
+    font-style: italic;
+}
+
+
 
 /* .main2 {
     --spike-color: var(--bg-color);
@@ -127,8 +138,9 @@ footer {
 .main3 {
     background: linear-gradient(
         to right,
-        var(--lavender-cream),
-        var(--lavender-cream)
+        var(--purple-blue),
+        var(--nople-plum),
+        var(--acai-juice)
     );
     padding: 3rem 0;
     margin-top: -3rem ;
