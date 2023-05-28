@@ -311,7 +311,8 @@ def logout():
 
     # redirect user to front page
     flash('Signed Out!')
-    return redirect('/')
+    print('user has been directed to home')
+    return redirect('/home')
     
 if __name__ == "__main__":
     app.run(host='0.0.0.0',debug=True)

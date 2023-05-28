@@ -1,6 +1,7 @@
 *,*::after, *::before {
     box-sizing: border-box;
 }
+
  :root {
     --purple-blue: #681fef;
     --lavender-cream: #c8a8f2;
@@ -18,13 +19,20 @@ html {
 }
 
 body {
-    color: white;
     min-height: 100%;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     display: flex;
     flex-direction: column;
     margin: 0;
     line-height: 1.5rem;
+}
+
+.main a {
+    text-decoration: none;
+}
+#logo_title {
+    color: var(--purple-blue);
+    font-weight: 400;
 }
 
 footer {
@@ -42,6 +50,7 @@ footer {
     isolation: isolate;
     margin-bottom: -3rem;
     display: flex;
+    margin-top: 0;
 }
 
 .main::after {
@@ -152,14 +161,18 @@ footer {
       radial-gradient(34.99px at 50% -18px,#0000 99%,#000 101%) 50% 30px/120px 100% repeat-x;
     -webkit-mask: var(--mask);
             mask: var(--mask);
-  }
+}
+
+.main3 h1 {
+    color: var(--orange);
+}
 
 .content-right img {
     margin-bottom: 2rem;
 }
 
 .content-left h1{
-    font-size: 50px;
+    font-size: 3rem;
     color: #fca70c;
     align-items: center;
 }
@@ -197,43 +210,153 @@ footer {
     align-items: center;
 } 
 
-.swiper-slide:hover {
-    box-shadow: 0 .5rem 0.75rem -.25em rgba(0, 0, 0, .3);
+@media (min-width: 1399.99px) { 
+    .main {
+        margin-top: 2rem;
+    }
+    .meow {
+        left: 29%;
+        top: 35%;
+    }
+}
+/* // `xxl` applies to x-large devices (large desktops, less than 1400px) */
+@media (max-width: 1399.98px) { 
+    .main {
+        margin-top: 2rem;
+    }
+    .meow {
+        left: 29%;
+        top: 35%;
+    }
 }
 
+/* // `xl` applies to large devices (desktops, less than 1200px) */
+@media (max-width: 1199.98px) { 
+    .main {
+        margin-top: 1rem;
+    }
+    .meow {
+        left: 28%;
+        top: 35%;
+    }
+ }
 
+/* // `lg` applies to medium devices (tablets, less than 992px) */
+@media (max-width: 991.98px) { 
+    .main {
+        margin-top: 1rem;
+    }
+    .meow {
+        left: 29%;
+        top: 35%;
+    }
+}
+
+/* // `md` applies to small devices (landscape phones, less than 768px) */
+@media (max-width: 767.98px) { 
+    .main {
+        margin-top: 0;
+    }
+    .meow {
+        left: 38%;
+        top: 35%;
+    }
+}
 
 /* // `sm` applies to x-small devices (portrait phones, less than 576px) */
 @media (max-width: 575.98px) { 
+    .main {
+        margin-top: 0;
+    }
     .main-content {
         display: grid;
         text-align: center;
     }
 
+    .content-right {
+        display: none;
+    }
+
     .content-left button {
        margin: auto;
     }
-    
-    div .content-right {
-        display: none;
-    }   
 
-    div .content-right {
+    .meow {
+        margin-right: 1rem;
+        left: 40%;
+        top: 32%;
+    }
+}
+/* mobile devices */
+@media (max-width: 480.98px) { 
+    .main-content {
+        display: grid;
         text-align: center;
+    }
+
+    .content-right {
+        display: none;
+    }
+
+    .content-left button {
+       margin: auto;
+    }
+
+    .meow {
+        margin-right: 1rem;
+        left: 40%;
+        top: 32%;
     }
 }
 
-/* // `md` applies to small devices (landscape phones, less than 768px) */
-@media (max-width: 767.98px) {  }
+@media (max-width: 420.98px) { 
+    .main-content {
+        display: grid;
+        text-align: center;
+    }
 
-/* // `lg` applies to medium devices (tablets, less than 992px) */
-@media (max-width: 991.98px) { }
+    .content-right {
+        display: none;
+    }
 
-/* // `xl` applies to large devices (desktops, less than 1200px) */
-@media (max-width: 1199.98px) {  }
+    .content-left button {
+       margin: auto;
+    }
 
-/* // `xxl` applies to x-large devices (large desktops, less than 1400px) */
-@media (max-width: 1399.98px) {  }
+    .meow {
+        margin-right: 1rem;
+        left: 53%;
+        top: 30%;
+    }
+}
+/* mobile devices */
+@media (max-width: 350.98px) { 
+    .main-content {
+        display: grid;
+        text-align: center;
+    }
+
+    .content-right {
+        display: none;
+    }
+
+    .content-left button {
+       margin: auto;
+    }
+
+    .meow {
+        margin-right: 1rem;
+        left: 53%;
+        top: 30%;
+    }
+
+    #cat {
+        width: 250px;
+        height: 300px;
+    }
+}
+
+
 /* the scroller part */
 /* .media-scroller {
     --_spacer: 1rem;
