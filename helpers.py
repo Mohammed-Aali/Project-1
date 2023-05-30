@@ -1,5 +1,5 @@
 import random, string, secrets, configparser, smtplib, time
-
+import stat, os
 from email.message import EmailMessage
 from flask import render_template, session, redirect
 from functools import wraps
@@ -11,6 +11,8 @@ config = configparser.ConfigParser()
 # read the config file
 config.read('app.ini')
 
+print(os.path.abspath('app.ini')) # print the absolute path of app.ini
+print(stat.filemode(os.stat('app.ini').st_mode)) # print the permissions of app.ini
 # this code snippet is from cs50x final project finance
 def apology(message, code=400):
     """Render message as an apology to user."""

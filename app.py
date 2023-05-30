@@ -11,21 +11,21 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from helpers import apology, generate_code, register_required, send_email, hush
 
 # configure application
-app = Flask(__name__)
+application = Flask(__name__)
 
 # setting up a secret key
-app.config['SECRET_KEY'] = hush()
+application.config['SECRET_KEY'] = hush()
 
 # Configure session to use redis
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "redis"
-app.config["SESSION_REDIS"] = redis.from_url("redis://localhost:6379")
-Session(app)
+application.config["SESSION_PERMANENT"] = False
+application.config["SESSION_TYPE"] = "redis"
+application.config["SESSION_REDIS"] = redis.from_url("redis://localhost:6379")
+Session(application)
 
 # configure CS50 Library to use SQLite database
 db = SQL('sqlite:///website.db')
 
-@app.after_request
+@application.after_request
 def after_request(response):
     """Ensure responses aren't cached"""
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
@@ -33,13 +33,13 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-@app.route('/')
-@app.route('/home/')
+@application.route('/')
+@application.route('/home/')
 def index():
     """Display Projects"""
     return render_template('index.html')
 
-@app.route('/login', methods=['GET', 'POST'])
+@application.route('/login', methods=['GET', 'POST'])
 def login():
     """Log user in"""
 
@@ -93,7 +93,7 @@ def login():
             return render_template("login.html")
 
 
-@app.route('/register', methods=['GET', 'POST'])
+@application.route('/register', methods=['GET', 'POST'])
 def register():
     """Register user"""
     if request.method == 'POST':
@@ -139,7 +139,7 @@ def register():
         else:
             return render_template('register.html')
 
-@app.route('/confirm', methods=['GET', 'POST'])
+@application.route('/confirm', methods=['GET', 'POST'])
 @register_required
 def confirm():
     if request.method == 'POST':
@@ -209,7 +209,7 @@ def confirm():
         else:
             return render_template("confirm.html")
 
-@app.route('/reset', methods=['GET', 'POST'])
+@application.route('/reset', methods=['GET', 'POST'])
 def reset():
     """ Resets password """
 
@@ -302,7 +302,7 @@ def reset():
         return render_template('index.html')
 
 
-@app.route('/logout')
+@application.route('/logout')
 def logout():
     """ Log user out """
 
@@ -315,4 +315,4 @@ def logout():
     return redirect('/home')
     
 if __name__ == "__main__":
-    app.run(host='0.0.0.0',debug=True)
+    application.run(host='0.0.0.0',debug=True)
