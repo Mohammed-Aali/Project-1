@@ -26,26 +26,6 @@ Confirm Code
         if (confirmCheck.innerHTML === 'Please enter a valid confirmation code.') {
             confirmCheck.classList.add("d-block")
         }
-
-        // set the logic for the counter
-        let remainingTime = 120;
-        resendButton.setAttribute('disabled', '')
-
-        // to enable the button after two minutes has passed
-        setTimeout(function() {
-            resendButton.removeAttribute('disabled')
-            resendCheck = true;
-        }, 120000)
-
-        let timerInterval = setInterval(function() {
-            remainingTime--
-            resendButton.innerHTML = `Resend Code In ${remainingTime} seconds`
-
-            if (remainingTime == 0) {
-                clearInterval(timerInterval)
-                resendButton.innerHTML = '<span>Resend New Code</span>'
-            }
-        }, 1000)
     }
 
     // set up the variables
@@ -55,7 +35,6 @@ Confirm Code
     const resendButton = document.querySelector("button[value='resend']")
     const resendCodeCheck = document.querySelector("#resendCodeCheck")
     let regExp = /^[0-9a-zA-Z]{6}$/
-    let resendCheck = false;
     const form = document.getElementsByTagName('form')[0]
     let passCheck = false;
 
@@ -80,11 +59,7 @@ Confirm Code
             form.classList.add("was-validated");
             event.preventDefault();
             event.stopPropagation();
-        } else if (buttonValue === 'resend' && !resendCheck) {
-            event.preventDefault();
-            resendCodeCheck.innerHTML = "You need to wait For 2 minutes before resending the code"
-            resendCodeCheck.classList.add("d-block")
-        }
+        } 
     })
     
 </script>

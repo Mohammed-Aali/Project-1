@@ -10,22 +10,22 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from helpers import apology, generate_code, register_required, send_email, hush
 
-# configure application
-application = Flask(__name__)
+# configure app
+app = Flask(__name__)
 
 # setting up a secret key
-application.config['SECRET_KEY'] = hush()
+app.config['SECRET_KEY'] = hush()
 
 # Configure session to use redis
-application.config["SESSION_PERMANENT"] = False
-application.config["SESSION_TYPE"] = "redis"
-application.config["SESSION_REDIS"] = redis.from_url("redis://localhost:6379")
-Session(application)
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "redis"
+app.config["SESSION_REDIS"] = redis.from_url("redis://localhost:6379")
+Session(app)
 
 # configure CS50 Library to use SQLite database
 db = SQL('sqlite:///website.db')
 
-@application.after_request
+@app.after_request
 def after_request(response):
     """Ensure responses aren't cached"""
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
@@ -33,13 +33,13 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-@application.route('/')
-@application.route('/home/')
+@app.route('/')
+@app.route('/home/')
 def index():
     """Display Projects"""
     return render_template('index.html')
 
-@application.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     """Log user in"""
 
@@ -93,7 +93,7 @@ def login():
             return render_template("login.html")
 
 
-@application.route('/register', methods=['GET', 'POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     """Register user"""
     if request.method == 'POST':
@@ -139,7 +139,7 @@ def register():
         else:
             return render_template('register.html')
 
-@application.route('/confirm', methods=['GET', 'POST'])
+@app.route('/confirm', methods=['GET', 'POST'])
 @register_required
 def confirm():
     if request.method == 'POST':
@@ -188,8 +188,8 @@ def confirm():
             timer = session.get('timer', 0)
             time_delta = current_time - timer
 
-            if time_delta < 60:
-                flash(f"You can only resend the code every 2 minutes. Please wait for {60 - int(time_delta)} seconds more.")
+            if time_delta < 120:
+                flash(f"You can only resend the code every 2 minutes. Please wait for {120 - int(time_delta)} seconds more.")
                 return redirect('/confirm')
             else:
                 # first time set the value to the current time
@@ -209,7 +209,7 @@ def confirm():
         else:
             return render_template("confirm.html")
 
-@application.route('/reset', methods=['GET', 'POST'])
+@app.route('/reset', methods=['GET', 'POST'])
 def reset():
     """ Resets password """
 
@@ -302,7 +302,7 @@ def reset():
         return render_template('index.html')
 
 
-@application.route('/logout')
+@app.route('/logout')
 def logout():
     """ Log user out """
 
@@ -315,4 +315,4 @@ def logout():
     return redirect('/home')
     
 if __name__ == "__main__":
-    application.run(host='0.0.0.0',debug=True)
+    app.run(host='0.0.0.0',debug=True)

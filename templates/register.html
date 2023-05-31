@@ -8,17 +8,17 @@
 <div class="container-fluid py-5 text-center" style="max-width: 350px;">
     <form action="/register" method="post"  enctype="multipart/form-data" novalidate>
         <div class="form-floating mb-3">
-            <input autofocus autocomplete name="email" type="email" class="form-control" id="emailInput" placeholder="3ffect@example.com" required>
+            <input autofocus autocomplete='email' name="email" type="email" class="form-control" id="emailInput" placeholder="3ffect@example.com" required>
             <label for="emailInput">Email</label>
             <div id='emailCheck'class="invalid-feedback" role="alert">{{ msg }}</div>
         </div>
         <div class="form-floating mb-3">
-            <input autocomplete name="password" type="password" class="form-control" id="password" placeholder="Password" required>
+            <input autocomplete="new-password" name="password" type="password" class="form-control" id="password" placeholder="Password" required>
             <label for="password">Password</label>
             <div id='passCheck'class="invalid-feedback mt-1" role="alert"></div>
         </div>
         <div class="form-floating mb-3">
-            <input autocomplete name="confirmation" type="password" class="form-control" id="confirmPassword" placeholder="Password" required>
+            <input autocomplete="current-password" name="confirmation" type="password" class="form-control" id="confirmPassword" placeholder="Password" required>
             <label for="password">Password confimarion</label>
             <div id ='passTest' style="display:none;" class="invalid-feedback">Password must match.</div>
         </div>
