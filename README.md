@@ -2,7 +2,7 @@
 
 This is my final project for CS50, my first computer science course. I built a personal portfolio website using Flask, Python, CSS, HTML and JavaScript to showcase my skills, projects, and achievements as a web developer.
 
-You can watch a video presentation of my project [HERE] (https://www.youtube.com/watch?v=dQw4w9WgXcQ). The actual video is cooming soon.
+You can watch a video presentation of my project [HERE](https://www.youtube.com/watch?v=dQw4w9WgXcQ). The actual video is cooming soon.
 
 ## Features
 
