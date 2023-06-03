@@ -3,29 +3,38 @@
 Login
 {% endblock %}
 {% block main %}
-<div class="container-fluid py-5 text-center" style="max-width: 350px;">
+<div class="container-fluid py-5 text-center" onsubmit="disableBtn()" style="max-width: 400px;">
     <form action="/login" method="post" enctype="multipart/form-data">
-        <div class="form-floating mb-3">
-            <input id="emailInput" autofocus autocomplete="email" name="email" type="username" class="form-control" id="floatingInput" type="email" placeholder="name@example.com" required>
+        <section class="form-floating mb-3">
+            <input id="emailInput" autofocus autocomplete="email" name="email" class="form-control" type="email" placeholder="name@example.com" required aria-describedby="emailCheck">
             <label for="emailInput">Email</label>
             <div id='emailCheck'class="invalid-feedback" role="alert"></div>
-          </div>
-          <div class="form-floating mb-3">
-            <input id="password" autocomplete="current-password" name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password" required>
-            <label for="password">Password</label>
+        </section>
+        <section class="form-floating mt-4">
+            <div class="input-group ">
+                <input id="new-password" autocomplete="new-password" name="password" type="password" class="form-control input-box py-3" id="new-password" placeholder="Password" required aria-describedby="passCheck">
+                <div class="input-group-text">
+                  <i id='togglePasswordButton' class="bi bi-eye-slash"></i>
+                </div>
+            </div>
             <div id='passCheck'class="invalid-feedback mt-1" role="alert">{{ msg }}</div>
-        </div>
-        <p>Don't have an account? <a href="/register">Sign up</a></p>
+        </section>
+        <p class="mt-2">Don't have an account? <a href="/register">Sign up</a></p>
         <!-- <p><a href="{{ url_for('reset') }}">Forgot your password?</a></p> -->
-        <button type="submit" class="btn btn-primary mt-3">Sign in</button>
-        <div id='signIn'class="invalid-feedback mt-1" role="alert"></div>
+        <button id='loginBtn' type="submit" class="btn btn-primary mt-3">Sign in</button>
     </form>
 </div>
 
 <script>
-
     window.onload = () =>
     {
+        let currentPage = window.location.href
+        if(currentPage.match(/(^|\W)login($|\W)/)) {
+            console.log('match')
+        } else {
+            console.log('no match')
+        }
+
         if (passCheck.innerHTML === "Email or Password don't match") {
             passCheck.classList.add("d-block")
         }
@@ -36,19 +45,39 @@ Login
         {regex: /[a-z]/, msg: 'Password must contain at least one lowercase letter.'},
         {regex: /[A-Z]/, msg: 'Password must contain at least one uppercase letter.'},
         {regex: /\d/, msg: "Password must contain at least one number."},
-        {regex: /[\W_]/, msg: 'Password must contain at least one special character (!, # or %).'}
+        // {regex: /[\W_]/, msg: 'Password must contain at least one special character (!, # or %).'}
     ]
 
     // setup variables
     let checkResult, checkEmail, checkPass;
-    let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/
-    const email = document.getElementById('emailInput')
-    const form = document.getElementsByTagName('form')[0]
-    const password = document.getElementById("password")
-    const passCheck = document.getElementById("passCheck")
-    const emailCheck = document.getElementById("emailCheck")
-    const signIn = document.getElementById("signIn")
+    let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    const email = document.getElementById('emailInput');
+    const form = document.getElementsByTagName('form')[0];
+    const password = document.getElementById("new-password");
+    const passCheck = document.getElementById("passCheck");
+    const emailCheck = document.getElementById("emailCheck");
+    const signIn = document.getElementById("signIn");
+    const togglePasswordBlock = document.getElementsByClassName('input-group-text')[0];
+    const togglePasswordButton = document.getElementById('togglePasswordButton');
+    // disable the button after it has been clicked
+    function disableBtn() {
+        var btn = document.getElementById("loginBtn");
+        btn.disabled = true;
+        btn.innerHTML = 'Posting...';
+    }
 
+    togglePasswordBlock.addEventListener('click', togglePassword)
+    function togglePassword(){
+        if (password.type === 'password') {
+            password.type = 'text';
+            togglePasswordButton.setAttribute('aria-label', 'Hide password.');
+            togglePasswordButton.classList.replace("bi-eye-slash", "bi-eye");
+        } else {
+            password.type = 'password';
+            togglePasswordButton.setAttribute('aria-label', 'Show password as plain text. ' + 'Warning: this will display your password on the screen.');
+            togglePasswordButton.classList.replace("bi-eye", "bi-eye-slash");
+        }
+    }
     // check for email
     email.addEventListener('input', event => {
         checkResult = true
@@ -80,12 +109,14 @@ Login
     
     // form check
     form.addEventListener('submit', event => {
+        
         if (!checkResult)
         {
             form.classList.add("was-validated");
             event.preventDefault();
             event.stopPropagation();
-        } 
+        }
     })
+
 </script>
 {% endblock %}

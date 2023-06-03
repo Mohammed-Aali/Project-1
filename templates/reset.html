@@ -9,19 +9,18 @@ Reset
         <div class="form-floating mb-3">
             <input autofocus name="email" type="email" class="form-control" required id="emailInput" placeholder="name@example.com">
             <label id="emailLabel" for="emailInput">Email</label>
-            <div id='emailCheck'class="invalid-feedback" role="alert"></div>
+            <div id='emailCheck'class="invalid-feedback" role="alert">{{ msg }} {{ msg1 }}</div>
         </div>
         <div class="form-floating mb-3">
-            <input autofocus name="code" type="text" class="form-control gone" id="code" placeholder="Enter the 6 characters you received" minlength="6" maxlength="6" pattern="[A-Za-z0-9]{6}" autocomplete="off">
-            <label id="codeLabel" class='gone' for="code">Code</label>
-            <div id='codeCheck' class="invalid-feedback mt-1" role="alert">{{ msg }}</div>
+            <input autofocus name="code" type="text" class="form-control" id="code" placeholder="Enter the 6 characters you received" minlength="6" maxlength="6" pattern="[A-Za-z0-9]{6}" autocomplete="off">
+            <label id="codeLabel" for="code">Code</label>
+            <div id='codeCheck' class="invalid-feedback mt-1" role="alert">{{ msg1 }}</div>
         </div>
 
         <div class="d-grid gap-2">
-            <button type="submit" name="confirmCode" value="confirmCode" class="btn btn-primary mt-2 gone" >Confirm Code</button>
+            <button type="submit" name="confirmCode" value="confirmCode" class="btn btn-primary mt-2" >Confirm Code</button>
             <button type="submit" name="confirm" value="confirm" class="btn btn-primary">Confirm email</button>
-            <button type="submit" name="resend" value="resend" class="btn btn-primary mt-2 gone" >Resend Code</button>
-            <div id='resendCodeCheck' class='invalid-feedback' role="alert">{{ msg }}</div>
+            <button type="submit" name="resend" value="resend" class="btn btn-primary mt-2" >Resend Code</button>
         </div>
     </form>
 </div>
@@ -32,7 +31,7 @@ Reset
     const code = document.querySelector('#code')
     const emailLabel = document.querySelector('#emailLabel')
     const codeLabel = document.querySelector('#codeLabel')
-    const codeCheck = document.querySelector('#codeCheck')
+    const codeCheck = document.getElementById("codeCheck");
     const email = document.querySelector('#emailInput')
     const emailCheck = document.querySelector('#emailCheck')
     const resendBtn = document.querySelector("button[value='resend']")
@@ -43,50 +42,57 @@ Reset
     let timeDelta = sessionStorage.getItem('timeDelta');
     let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/
     let regExp = /^[0-9a-zA-Z]{6}$/
-    let checkEmail;
-    let resendCheck= false;
+    let checkEmail = false;
+    let checkCode = false;
     console.log(codeCheck)
 
-    // set up the onload window to check
-    document.addEventListener("DOMContentLoaded", function() {
-        let flash = document.getElementById('flash')
-        let pattern = /You can only resend the code every 2 minutes\. Please wait for (-?\d+) seconds more\./;
-        let sentance = 'You can only resend the code every 2 minutes. Please wait for 00 seconds more.'
-        let match = sentance.match(pattern);
-        if ((flash.innerHTML.trim() == 'New code has been sent to your Email!') || match || codeCheck.innerHTML.trim() == 'Incorrect Code!') {
-            // magically gone
-            emailLabel.classList.add('gone')
-            email.classList.add('gone')
-            confirmBtn.classList.add('gone')
-            // magically appear
-            code.classList.remove('gone')
-            codeLabel.classList.remove('gone')
-            codeBtn.classList.remove('gone')
-            resendBtn.classList.remove('gone')
-            alert.innerHTML = 'We have sent you an email to confirm your reset password. Enter the code you received in the box below and click "Confirm Code"'
+    if( emailCheck.innerHTML.trim() == 'The Email you entered does not exist.' ) {
+        emailCheck.classList.add('d-block')
+    }
+    if (codeCheck.innerHTML.trim() === 'Incorrect Code!') {
+        codeCheck.classList.add('d-block')
+    }
 
-            // add a d-block
-            codeCheck.classList.add('d-block')
-        } else {
-            // reset everything
-            // magically reappear
-            emailLabel.classList.remove('gone')
-            email.classList.remove('gone')
-            confirmBtn.classList.remove('gone')
-            // magically gone
-            code.classList.add('gone')
-            codeLabel.classList.add('gone')
-            codeBtn.classList.add('gone')
-            resendBtn.classList.add('gone')
+    // // set up the onload window to check
+    // document.addEventListener("DOMContentLoaded", function() {
+    //     let flash = document.getElementById('flash')
+    //     let pattern = /You can only resend the code every 2 minutes\. Please wait for (-?\d+) seconds more\./;
+    //     let sentance = 'You can only resend the code every 2 minutes. Please wait for 00 seconds more.'
+    //     let match = sentance.match(pattern);
+    //     if ((flash.innerHTML.trim() == 'New code has been sent to your Email!') || match || codeCheck.innerHTML.trim() == 'Incorrect Code!') {
+    //         // magically gone
+    //         emailLabel.classList.add('gone')
+    //         email.classList.add('gone')
+    //         confirmBtn.classList.add('gone')
+    //         // magically appear
+    //         code.classList.remove('gone')
+    //         codeLabel.classList.remove('gone')
+    //         codeBtn.classList.remove('gone')
+    //         resendBtn.classList.remove('gone')
+    //         alert.innerHTML = 'We have sent you an email to confirm your reset password. Enter the code you received in the box below and click "Confirm Code"'
 
-            // add a d-block
-            codeCheck.classList.remove('d-block')
-        }
-        if (resendCodeCheck.innerHTML.trim() === "The Email you entered does not exist.") {
-            resendCodeCheck.classList.add('d-block');
-        }
-        console.log(codeCheck.innerHTML)
-    })
+    //         // add a d-block
+    //         codeCheck.classList.add('d-block')
+    //     } else {
+    //         // reset everything
+    //         // magically reappear
+    //         emailLabel.classList.remove('gone')
+    //         email.classList.remove('gone')
+    //         confirmBtn.classList.remove('gone')
+    //         // magically gone
+    //         code.classList.add('gone')
+    //         codeLabel.classList.add('gone')
+    //         codeBtn.classList.add('gone')
+    //         resendBtn.classList.add('gone')
+
+    //         // add a d-block
+    //         codeCheck.classList.remove('d-block')
+    //     }
+    //     if (resendCodeCheck.innerHTML.trim() === "The Email you entered does not exist.") {
+    //         resendCodeCheck.classList.add('d-block');
+    //     }
+    //     console.log(codeCheck.innerHTML)
+    // })
     // add event listener to check for characters
     code.addEventListener('input', function(event) {
         codeIn = event.target.value
@@ -95,36 +101,37 @@ Reset
             codeCheck.classList.add("d-block")
         } else {
             codeCheck.className = codeCheck.className.replace('d-block', 'gone')
+            checkCode = true;
         }
     })
 
-    // count related stuff
-    let remainingTime = timeDelta || 120
-    resendBtn.setAttribute('disabled', '')
-    // to enable the button after two minutes has passed
-    setTimeout(function() {
-        resendBtn.removeAttribute('disabled')
-        resendCheck = true;
-        sessionStorage.removeItem('timeDelta')
-    }, remainingTime * 1000)
+    // // count related stuff
+    // let remainingTime = timeDelta || 120
+    // resendBtn.setAttribute('disabled', '')
+    // // to enable the button after two minutes has passed
+    // setTimeout(function() {
+    //     resendBtn.removeAttribute('disabled')
+    //     resendCheck = true;
+    //     sessionStorage.removeItem('timeDelta')
+    // }, remainingTime * 1000)
 
-    let timerInterval = setInterval(function() {
-        remainingTime--
-        resendBtn.innerHTML = `Resend Code In ${remainingTime} seconds`
-        sessionStorage.setItem('timeDelta', remainingTime)
+    // let timerInterval = setInterval(function() {
+    //     remainingTime--
+    //     resendBtn.innerHTML = `Resend Code In ${remainingTime} seconds`
+    //     sessionStorage.setItem('timeDelta', remainingTime)
 
-        if (remainingTime <= 0 ) {
-            clearInterval(timerInterval)
-            sessionStorage.removeItem('timeDelta')
-            resendBtn.innerHTML = '<span>Resend New Code</span>'
-        }
-    }, 1000)
+    //     if (remainingTime <= 0 ) {
+    //         clearInterval(timerInterval)
+    //         sessionStorage.removeItem('timeDelta')
+    //         resendBtn.innerHTML = '<span>Resend New Code</span>'
+    //     }
+    // }, 1000)
         
     // check for email
     email.addEventListener('input', event => {
-        checkEmail = true
         emailIn = event.target.value
         if(emailRegex.test(emailIn)) {
+            checkEmail = true
             emailCheck.innerHTML = '<span style="color: green;">Nice 😊</span>'
         } else { 
             checkEmail = false

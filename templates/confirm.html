@@ -5,17 +5,19 @@ Confirm Code
 {% block main %}
 <div class="container-fluid py-5 text-center" style="max-width: 350px;">
     <div class="alert alert-info"><p> We have sent you an email to confirm your registration. Please check your inbox and follow the instructions to activate your account. If you don't see the email, please check your spam folder or contact us for assistance.</p> </div>
-    <form action="/confirm" method="post"  enctype="multipart/form-data" novalidate>
-        <div class="form-floating mb-3">
-            <input autofocus name="confirmationCode" type="text" class="form-control" id="confirmationCode" placeholder="Enter the 6 characters you received" maxlength="6" pattern="[A-Za-z0-9]{6}" autocomplete="off" required>
-            <label for="confirmationCode">Confirmation Code</label>
-            <div id='confirmCheck'class="invalid-feedback mt-1" role="alert">{{ msg }}</div>
-        </div>
-        <div class="d-grid gap-2">
-            <button type="submit" name="confirm" value="confirm" class="btn btn-primary" value="confirm">Confirm</button>
-            <button type="submit" name="resend" value="resend" class="btn btn-secondary mt-2" value="resend">Resend Code</button>
-            <div id='resendCodeCheck'class="invalid-feedback mt-1" role="alert"></div>
-        </div>
+    <form action="/confirm" method="post" enctype="multipart/form-data" novalidate>
+        <fieldset id="fieldset">
+            <div class="form-floating mb-3">
+                <input autofocus name="confirmationCode" type="text" class="form-control" id="confirmationCode" placeholder="Enter the 6 characters you received" maxlength="6" pattern="[A-Za-z0-9]{6}" autocomplete="off" required>
+                <label for="confirmationCode">Confirmation Code</label>
+                <div id='confirmCheck'class="invalid-feedback mt-1" role="alert">{{ msg }}</div>
+            </div>
+            <div class="d-grid gap-2">
+                <button id="confirm" type="submit" name="confirm" value="confirm" class="btn btn-primary" value="confirm">Confirm</button>
+                <button id='resend' type="submit" name="resend" value="resend" class="btn btn-secondary mt-2" value="resend">Resend Code</button>
+                <div id='resendCodeCheck'class="invalid-feedback mt-1" role="alert"></div>
+            </div>
+        </fieldset>
     </form>
 </div>
 
@@ -37,7 +39,7 @@ Confirm Code
     let regExp = /^[0-9a-zA-Z]{6}$/
     const form = document.getElementsByTagName('form')[0]
     let passCheck = false;
-
+    
     // add event listener to check for characters
     confirmationCode.addEventListener('input', function(e) {
         codeIn = event.target.value
@@ -49,17 +51,20 @@ Confirm Code
             confirmCheck.className = confirmCheck.className.replace('d-block', 'gone')
         }
     })
-
+    
     // add event listener to stop the form in case it did not meat conditions
     form.addEventListener('submit', function(event) {
         // grab the value of the button that was pressed
         let buttonValue = event.submitter.value;
+        
         if (buttonValue !== 'resend' && !passCheck)
         {
             form.classList.add("was-validated");
             event.preventDefault();
             event.stopPropagation();
-        } 
+        } else {
+            document.getElementById('confirm').disabled = true;
+        }
     })
     
 </script>

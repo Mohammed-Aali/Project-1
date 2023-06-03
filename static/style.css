@@ -109,8 +109,25 @@ footer {
     font-style: italic;
 }
 
+input[type=email]:not(:placeholder-shown):invalid {
+    color: red;
+}
 
-
+.input-icon-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+  
+.input-icon-container input {
+    padding-right: 2rem; /* leave some space for the icon */
+}
+  
+.input-icon-container i {
+    position: absolute;
+    right: 0.5rem; /* adjust as needed */
+    cursor: pointer;
+}
 /* .main2 {
     --spike-color: var(--bg-color);
     --spike-width: 50px;

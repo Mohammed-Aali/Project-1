@@ -12,18 +12,20 @@
             <label for="emailInput">Email</label>
             <div id='emailCheck'class="invalid-feedback" role="alert">{{ msg }}</div>
         </div>
-        <div class="form-floating mb-3">
-            <input autocomplete="new-password" name="password" type="password" class="form-control" id="password" placeholder="Password" required>
-            <label for="password">Password</label>
+        <div class="input-group mb-3">
+            <input autocomplete="new-password" name="password" type="password" class="form-control" id="password" placeholder="Password" required aria-describedby="passCheck">
+            <div class="input-group-text py-3">
+                <i id='togglePasswordButton' class="bi bi-eye-slash"></i>
+            </div>
             <div id='passCheck'class="invalid-feedback mt-1" role="alert"></div>
         </div>
         <div class="form-floating mb-3">
-            <input autocomplete="current-password" name="confirmation" type="password" class="form-control" id="confirmPassword" placeholder="Password" required>
+            <input autocomplete="new-password" name="confirmation" type="password" class="form-control" id="confirmPassword" placeholder="Password" required>
             <label for="password">Password confimarion</label>
             <div id ='passTest' style="display:none;" class="invalid-feedback">Password must match.</div>
         </div>
         <p>Already have an account? <a href="/login">Sign in</a></p>
-        <button class="btn btn-primary" type="submit">Sign up</button>
+        <button id="signUp" class="btn btn-primary" type="submit">Sign up</button>
     </form>
 </div>
 
@@ -42,7 +44,7 @@
         {regex: /[a-z]/, msg: 'Password must contain at least one lowercase letter.'},
         {regex: /[A-Z]/, msg: 'Password must contain at least one uppercase letter.'},
         {regex: /\d/, msg: "Password must contain at least one number."},
-        {regex: /[\W_]/, msg: 'Password must contain at least one special character (!, # or %).'}
+        // {regex: /[\W_]/, msg: 'Password must contain at least one special character (!, # or %).'}
     ]
 
     // define variable

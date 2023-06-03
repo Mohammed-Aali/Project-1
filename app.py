@@ -43,9 +43,6 @@ def index():
 def login():
     """Log user in"""
 
-    # forgets any user_id
-    session.clear()
-
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
         
@@ -54,8 +51,8 @@ def login():
         password = request.form.get('password', None)
 
         print(f'this is the email {email}')
-        # set up regexp for checks
-        password_regexp = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,32}$"
+        # set up regexp for checks(?=.*[\W_])
+        password_regexp = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,32}$"
         email_regex = r"^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$"
 
         # check vairables
@@ -109,8 +106,8 @@ def register():
         if len(row) > 0:
             return render_template('register.html', msg=msg)
             
-        # set up regexp for checks
-        password_regexp = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,32}$"
+        # set up regexp for checks (?=.*[\W_])
+        password_regexp = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,32}$"
         email_regex = r"^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$"
 
         # check vairables
@@ -215,6 +212,7 @@ def reset():
 
     # handles post
     if request.method == 'POST':
+        print('its a post')
         code = request.form.get('code', None)
 
         # handels the confirm button
@@ -233,27 +231,27 @@ def reset():
                 return apology("Invalid Email",'Valid Email')
             # Query database for email
             row = db.execute("SELECT * FROM users WHERE email = ?", email)
-
-            if len(row) != 1:
-                msg = "The Email you entered does not exist."
-                return render_template("reset.html", msg=msg)
+            print(f'this is the row {row}')
+            if len(row) < 1:
+                msg = 'The Email you entered does not exist.'
+                return render_template('reset.html', msg=msg, msg1=' ')
 
             # do some stuff related to the time module
             current_time = time.time()
             timer = session.get('timer', 0)
             time_delta = current_time - timer
-            # set the cookie value
-            if time_delta <= 120:
-                flash(f"You can only resend the code every 2 minutes. Please wait for {120 - int(time_delta)} seconds more.")
-                print(120 - int(time_delta))
-                return render_template('reset.html', time_delta= 120 - int(time_delta))
-            else: 
-                # first time set the value to the current time
-                session['timer'] = current_time
-                session['code'] = generate_code(6)
-                send_email(email, session.get('code'), 2)
-                flash("New code has been sent to your Email!")
-                return redirect('/reset')
+            # # set the cookie value
+            # if time_delta <= 120:
+            #     flash(f"You can only resend the code every 2 minutes. Please wait for {120 - int(time_delta)} seconds more.")
+            #     print(120 - int(time_delta))
+            #     return redirect('/reset')
+     
+            # first time set the value to the current time
+            session['timer'] = current_time
+            session['code'] = generate_code(6)
+            send_email(email, session.get('code'), 2)
+            flash("New code has been sent to your Email!")
+            return redirect('/reset')
 
 
         # handeles the reset button 
@@ -266,14 +264,13 @@ def reset():
             current_time = time.time()
             timer = session.get('timer', 0)
             time_delta = current_time - timer
-            # set the cookie value
+            # set the time value
             if time_delta <= 120:
-                flash(f"You can only resend the code every 2 minutes. Please wait for <span>{120 - int(time_delta)}</span> seconds more.")
+                flash(f"You can only resend the code every 2 minutes. Please wait for {120 - int(time_delta)} seconds more.")
                 print(120 - int(time_delta))
                 return render_template('reset.html', time_delta= 120 - int(time_delta))
-                print('this code block has executed')
             else: 
-                # first time set the value to the current time
+                # set the new value to the current time
                 session['timer'] = current_time
                 session['code'] = generate_code(6)
                 send_email(email, session.get('code'), 1)
@@ -282,14 +279,16 @@ def reset():
 
         # handle the confirm button
         elif request.form.get('confirmCode'):
+            print('we are here ')
             # declare variblaes
             code = request.form.get('code')
             confirm_code = session.get('code')
             msg = 'Incorrect Code!'
 
             if (str(code.lower()) != str(confirm_code.lower())):
-                print('here')
-                return render_template('reset.html', msg=msg)
+                print('here is the message that should be sent')
+                msg1 = 'Incorrect Code!'
+                return render_template("reset.html", msg1=msg1, msg=' ')
 
             return redirect("/reset")
 
@@ -299,7 +298,7 @@ def reset():
         return redirect('/reset')
     # get request 
     else:
-        return render_template('index.html')
+        return render_template('reset.html')
 
 
 @app.route('/logout')
