@@ -6,8 +6,8 @@ You can watch a video presentation of my project [HERE](https://www.youtube.com/
 
 ## Features
 
-- A homepage with my name, animated, bio
-- A skills section with the technologies and tools that I use for web development
+- A homepage with my name, animated picture, bio
+- A skills section with the technologies and tools that I used for web development
 - A responsive design that adapts to different screen sizes and devices
 - A user-friendly interface with buttons and beautiful colors
 
