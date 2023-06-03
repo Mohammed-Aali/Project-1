@@ -1,4 +1,4 @@
-# Mohammed Ali' Personal Portfolio Website
+# Mohammed Ali's Personal Portfolio Website
 
 This is my final project for CS50, my first computer science course. I built a personal portfolio website using Flask, Python, CSS, HTML and JavaScript to showcase my skills, projects, and achievements as a web developer.
 

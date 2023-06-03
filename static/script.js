@@ -28,7 +28,7 @@ if(currentPage.match(/(^|\W)login($|\W)/)) {
     let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     const email = document.getElementById('emailInput');
     const form = document.getElementsByTagName('form')[0];
-    const password = document.getElementById("new-password");
+    const password = document.getElementById("current-password");
     const passCheck = document.getElementById("passCheck");
     const emailCheck = document.getElementById("emailCheck");
     const signIn = document.getElementById("signIn");
@@ -41,7 +41,7 @@ if(currentPage.match(/(^|\W)login($|\W)/)) {
         btn.innerHTML = 'Posting...';
     }
 
-    togglePasswordBlock.addEventListener('click', togglePassword())
+    togglePasswordBlock.addEventListener('click', togglePassword)
     function togglePassword(){
         if (password.type === 'password') {
             password.type = 'text';
