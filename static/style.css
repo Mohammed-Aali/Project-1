@@ -42,6 +42,11 @@ footer {
 .swiper {
     margin-top: auto;
 }
+
+input[type=email]:not(:placeholder-shown):invalid {
+    color: red !important;
+}
+
 /* index page */
 /* Keven Powell { Spice up your site | Easy waves, angles, & othe creative shapes with CSS} {https://youtu.be/hWGgw1K-i8Y} */
 .main {
@@ -109,58 +114,6 @@ footer {
     font-style: italic;
 }
 
-input[type=email]:not(:placeholder-shown):invalid {
-    color: red;
-}
-
-.input-icon-container {
-    display: flex;
-    align-items: center;
-    position: relative;
-}
-  
-.input-icon-container input {
-    padding-right: 2rem; /* leave some space for the icon */
-}
-  
-.input-icon-container i {
-    position: absolute;
-    right: 0.5rem; /* adjust as needed */
-    cursor: pointer;
-}
-/* .main2 {
-    --spike-color: var(--bg-color);
-    --spike-width: 50px;
-    --spike-height: 10px;
-    position: relative;
-    color: black;
-    background: linear-gradient(
-        to right,
-        var(--exotic-lilac),
-        var(--lavender-cream)
-    );
-}
-
-.main2::before, .main2::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: var(--spike-height);
-    background: var(--spike-color);
-    -webkit-mask-image: url(/static/images/spike.svg);
-    -webkit-mask-size: var(--spike-width) var(--spike-height);
-    mask-image: url(/static/images/spike.svg);
-    mask-size: var(--spike-width) var(--spike-height);
-}
-
-.main2::before{
-    top: 0;
-}
-.main2::after{
-    bottom: 0;
-    transform: rotate(180deg);
-} */
-
 .main3 {
     background: linear-gradient(
         to right,
@@ -213,7 +166,7 @@ input[type=email]:not(:placeholder-shown):invalid {
     color: #333;
     line-height: 31px;
     margin: 30px 0;
-} 
+}
 /* javascript scroller */
 .swiper {
     width: 100%;
@@ -225,9 +178,9 @@ input[type=email]:not(:placeholder-shown):invalid {
     display: flex;
     justify-content: center;
     align-items: center;
-} 
+}
 
-@media (min-width: 1399.99px) { 
+@media (min-width: 1399.99px) {
     .main {
         margin-top: 2rem;
     }
@@ -237,7 +190,7 @@ input[type=email]:not(:placeholder-shown):invalid {
     }
 }
 /* // `xxl` applies to x-large devices (large desktops, less than 1400px) */
-@media (max-width: 1399.98px) { 
+@media (max-width: 1399.98px) {
     .main {
         margin-top: 2rem;
     }
@@ -248,7 +201,7 @@ input[type=email]:not(:placeholder-shown):invalid {
 }
 
 /* // `xl` applies to large devices (desktops, less than 1200px) */
-@media (max-width: 1199.98px) { 
+@media (max-width: 1199.98px) {
     .main {
         margin-top: 1rem;
     }
@@ -259,7 +212,7 @@ input[type=email]:not(:placeholder-shown):invalid {
  }
 
 /* // `lg` applies to medium devices (tablets, less than 992px) */
-@media (max-width: 991.98px) { 
+@media (max-width: 991.98px) {
     .main {
         margin-top: 1rem;
     }
@@ -270,7 +223,7 @@ input[type=email]:not(:placeholder-shown):invalid {
 }
 
 /* // `md` applies to small devices (landscape phones, less than 768px) */
-@media (max-width: 767.98px) { 
+@media (max-width: 767.98px) {
     .main {
         margin-top: 0;
     }
@@ -281,7 +234,7 @@ input[type=email]:not(:placeholder-shown):invalid {
 }
 
 /* // `sm` applies to x-small devices (portrait phones, less than 576px) */
-@media (max-width: 575.98px) { 
+@media (max-width: 575.98px) {
     .main {
         margin-top: 0;
     }
@@ -305,7 +258,7 @@ input[type=email]:not(:placeholder-shown):invalid {
     }
 }
 /* mobile devices */
-@media (max-width: 480.98px) { 
+@media (max-width: 480.98px) {
     .main-content {
         display: grid;
         text-align: center;
@@ -326,7 +279,7 @@ input[type=email]:not(:placeholder-shown):invalid {
     }
 }
 
-@media (max-width: 420.98px) { 
+@media (max-width: 420.98px) {
     .main-content {
         display: grid;
         text-align: center;
@@ -347,7 +300,7 @@ input[type=email]:not(:placeholder-shown):invalid {
     }
 }
 /* mobile devices */
-@media (max-width: 350.98px) { 
+@media (max-width: 350.98px) {
     .main-content {
         display: grid;
         text-align: center;
@@ -372,44 +325,21 @@ input[type=email]:not(:placeholder-shown):invalid {
         height: 300px;
     }
 }
-
-
-/* the scroller part */
-/* .media-scroller {
-    --_spacer: 1rem;
-    display: grid;
-    gap: var(--_spacer);
-    grid-auto-flow: column;
-    grid-auto-columns: 36%;
-
-    padding: 0 var(--_spacer) var(--_spacer);
-
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;
-    background-color: #f1f1f1;
+@-webkit-keyframes autofill {
+    0%,100% {
+        color: #666;
+        background: transparent;
+    }
 }
 
-.media-element {
-    display: grid;
-    grid-template-rows: min-content;
-    gap: var(--_spacer);
-    padding: var(--_spacer);
-    background-color: rgba(0, 0, 0, 0.2);;
-    border-radius: 5px;
-    box-shadow: 10px 5px 10px #681fef;
+/* Change the white to any color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
 }
-
-.snaps-inline {
-    scroll-snap-type: inline mandatory;
-    scroll-padding-inline: var(--_spacer, 1rem);
+/*Change text in autofill textbox*/
+input:-webkit-autofill{
+    -webkit-text-fill-color: black;
 }
-
-.snaps-inline > * {
-    scroll-snap-align: start;
-}
-
-.media-element > img {
-    inline-size: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-} */

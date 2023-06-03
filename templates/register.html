@@ -5,114 +5,29 @@
 {% endblock %}
 
 {% block main %}
-<div class="container-fluid py-5 text-center" style="max-width: 350px;">
+<div class="container-fluid py-5 text-center" onsubmit="disableButton()" style="max-width: 350px;">
     <form action="/register" method="post"  enctype="multipart/form-data" novalidate>
-        <div class="form-floating mb-3">
-            <input autofocus autocomplete='email' name="email" type="email" class="form-control" id="emailInput" placeholder="3ffect@example.com" required>
+        <section class="form-floating mb-3">
+            <input autofocus autocomplete='email' name="email" type="email" class="form-control" id="emailInput" placeholder="3ffect@example.com" required aria-describedby="emailCheck">
             <label for="emailInput">Email</label>
             <div id='emailCheck'class="invalid-feedback" role="alert">{{ msg }}</div>
-        </div>
-        <div class="input-group mb-3">
-            <input autocomplete="new-password" name="password" type="password" class="form-control" id="password" placeholder="Password" required aria-describedby="passCheck">
+        </section>
+        <section class="input-group mb-3">
+            <input autocomplete="new-password" name="password" type="password" class="form-control" id="password" placeholder="Password" required aria-describedby="passCheck" aria-describedby="passCheck">
             <div class="input-group-text py-3">
-                <i id='togglePasswordButton' class="bi bi-eye-slash"></i>
+                  <i id='togglePasswordButton1' class="bi bi-eye-slash"></i>
             </div>
             <div id='passCheck'class="invalid-feedback mt-1" role="alert"></div>
-        </div>
-        <div class="form-floating mb-3">
-            <input autocomplete="new-password" name="confirmation" type="password" class="form-control" id="confirmPassword" placeholder="Password" required>
-            <label for="password">Password confimarion</label>
+        </section>
+        <section class="input-group mb-3">
+            <input autocomplete="new-password" name="confirmation" type="password" class="form-control" id="confirmPassword" placeholder="Password confirmation" required aria-describedby="passTest">
+            <div class="input-group-text py-3">
+                  <i id='togglePasswordButton2' class="bi bi-eye-slash"></i>
+            </div>
             <div id ='passTest' style="display:none;" class="invalid-feedback">Password must match.</div>
-        </div>
+        </section>
         <p>Already have an account? <a href="/login">Sign in</a></p>
-        <button id="signUp" class="btn btn-primary" type="submit">Sign up</button>
+        <button id='signUp' class="btn btn-primary" type="submit">Sign up</button>
     </form>
 </div>
-
-<script>
-    // on load window
-    window.onload = function()
-    {
-        if (emailCheck.innerHTML === 'Email is already in use') {
-            emailCheck.classList.add("d-block")
-        }
-    }
-    
-    // define a an object array of regEx with the message associated with them
-    let regexArray = [
-    {regex: /^[^]{8,32}$/, msg: "Password must be exactly between 8 and 32 characters long."},
-        {regex: /[a-z]/, msg: 'Password must contain at least one lowercase letter.'},
-        {regex: /[A-Z]/, msg: 'Password must contain at least one uppercase letter.'},
-        {regex: /\d/, msg: "Password must contain at least one number."},
-        // {regex: /[\W_]/, msg: 'Password must contain at least one special character (!, # or %).'}
-    ]
-
-    // define variable
-    let checkResult, checkConfirm;
-    let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/
-    const email = document.getElementById('emailInput')
-    const form = document.getElementsByTagName('form')[0]
-    const password = document.getElementById("password")
-    const confirmPassword = document.getElementById("confirmPassword")
-    const passTest = document.getElementById("passTest")
-    const passCheck = document.getElementById("passCheck")
-    const emailCheck = document.getElementById("emailCheck")
-
-    
-
-    email.addEventListener('input', event => {
-        checkResult = true
-        emailIn = event.target.value
-        if(emailRegex.test(emailIn)) {
-            emailCheck.innerHTML = '<span style="color: green;">Nice 😊</span>'
-        } else { 
-            checkResult = false
-            emailCheck.classList.add('d-block');
-            emailCheck.innerHTML = 'Please enter a valid email Adress';
-        }
-    })
-    // check password for validity using the regexp Array
-    password.addEventListener('input', event => {
-    passwordIn = event.target.value
-    checkResult = true
-    regexArray.forEach(item => {
-        if(!item.regex.test(passwordIn)) {
-        checkResult = false
-        passCheck.classList.add('d-block')
-        passCheck.innerHTML = `<p>${item.msg}</p>`
-        } 
-        });
-        if (checkResult) {
-            passCheck.innerHTML = '<span style="color: green;">Nice 😊</span>'
-        }
-    });
-    // check for confimarion
-    confirmPassword.addEventListener('input', event => {
-        if (passwordIn != event.target.value)
-        {
-            checkConfirm = false;
-            passTest.classList.add('d-block')
-        }
-        else
-        {
-            checkConfirm = true;
-            passTest.className = passTest.className.replace('d-block', 'gone')
-        }
-    })
-
-    // prevent form default
-    form.addEventListener('submit', event => {
-        if (!checkResult || !checkConfirm)
-        {
-            form.classList.add("was-validated");
-            event.preventDefault();
-            event.stopPropagation();
-        }
-    })
-</script>
-<style>
-    .was-validated .form-control:invalid {
-        border-color: red;
-    }
-</style>
 {% endblock %}

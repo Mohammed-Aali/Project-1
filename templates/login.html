@@ -3,120 +3,22 @@
 Login
 {% endblock %}
 {% block main %}
-<div class="container-fluid py-5 text-center" onsubmit="disableBtn()" style="max-width: 400px;">
+<div class="container-fluid py-5 text-center" onsubmit="disableBtn()" style="max-width: 350px;">
     <form action="/login" method="post" enctype="multipart/form-data">
-        <section class="form-floating mb-3">
+        <section class="form-floating mb-4">
             <input id="emailInput" autofocus autocomplete="email" name="email" class="form-control" type="email" placeholder="name@example.com" required aria-describedby="emailCheck">
             <label for="emailInput">Email</label>
             <div id='emailCheck'class="invalid-feedback" role="alert"></div>
         </section>
-        <section class="form-floating mt-4">
-            <div class="input-group ">
-                <input id="new-password" autocomplete="new-password" name="password" type="password" class="form-control input-box py-3" id="new-password" placeholder="Password" required aria-describedby="passCheck">
-                <div class="input-group-text">
-                  <i id='togglePasswordButton' class="bi bi-eye-slash"></i>
-                </div>
+        <section class="input-group mt-4">
+            <input id="current-password" autocomplete="current-password" name="password" type="password" class="form-control input-box py-3" id="new-password" placeholder="password" required aria-describedby="passCheck">
+            <div class="input-group-text">
+              <i id='togglePasswordButton' class="bi bi-eye-slash"></i>
             </div>
             <div id='passCheck'class="invalid-feedback mt-1" role="alert">{{ msg }}</div>
         </section>
-        <p class="mt-2">Don't have an account? <a href="/register">Sign up</a></p>
-        <!-- <p><a href="{{ url_for('reset') }}">Forgot your password?</a></p> -->
+        <p class='mt-2'>Don't have an account? <a href="/register">Sign up</a></p>
         <button id='loginBtn' type="submit" class="btn btn-primary mt-3">Sign in</button>
     </form>
 </div>
-
-<script>
-    window.onload = () =>
-    {
-        let currentPage = window.location.href
-        if(currentPage.match(/(^|\W)login($|\W)/)) {
-            console.log('match')
-        } else {
-            console.log('no match')
-        }
-
-        if (passCheck.innerHTML === "Email or Password don't match") {
-            passCheck.classList.add("d-block")
-        }
-    }
-    // define a an object array of regEx with the message associated with them
-    let regexArray = [
-        {regex: /^[^]{8,32}$/, msg: "Password must be exactly between 8 and 32 characters long."},
-        {regex: /[a-z]/, msg: 'Password must contain at least one lowercase letter.'},
-        {regex: /[A-Z]/, msg: 'Password must contain at least one uppercase letter.'},
-        {regex: /\d/, msg: "Password must contain at least one number."},
-        // {regex: /[\W_]/, msg: 'Password must contain at least one special character (!, # or %).'}
-    ]
-
-    // setup variables
-    let checkResult, checkEmail, checkPass;
-    let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    const email = document.getElementById('emailInput');
-    const form = document.getElementsByTagName('form')[0];
-    const password = document.getElementById("new-password");
-    const passCheck = document.getElementById("passCheck");
-    const emailCheck = document.getElementById("emailCheck");
-    const signIn = document.getElementById("signIn");
-    const togglePasswordBlock = document.getElementsByClassName('input-group-text')[0];
-    const togglePasswordButton = document.getElementById('togglePasswordButton');
-    // disable the button after it has been clicked
-    function disableBtn() {
-        var btn = document.getElementById("loginBtn");
-        btn.disabled = true;
-        btn.innerHTML = 'Posting...';
-    }
-
-    togglePasswordBlock.addEventListener('click', togglePassword)
-    function togglePassword(){
-        if (password.type === 'password') {
-            password.type = 'text';
-            togglePasswordButton.setAttribute('aria-label', 'Hide password.');
-            togglePasswordButton.classList.replace("bi-eye-slash", "bi-eye");
-        } else {
-            password.type = 'password';
-            togglePasswordButton.setAttribute('aria-label', 'Show password as plain text. ' + 'Warning: this will display your password on the screen.');
-            togglePasswordButton.classList.replace("bi-eye", "bi-eye-slash");
-        }
-    }
-    // check for email
-    email.addEventListener('input', event => {
-        checkResult = true
-        emailIn = event.target.value
-        if(emailRegex.test(emailIn)) {
-            emailCheck.innerHTML = '<span style="color: green;">Nice 😊</span>'
-        } else { 
-            checkResult = false
-            emailCheck.classList.add('d-block');
-            emailCheck.innerHTML = 'Please enter a valid email Adress';
-        }
-    })
-    // check password for validity using the regexp Array
-    password.addEventListener('input', event => {
-        passwordIn = event.target.value
-        checkResult = true
-        regexArray.forEach(item => {
-            if(!item.regex.test(passwordIn)) {
-            checkResult = false
-            passCheck.classList.add('d-block')
-            passCheck.innerHTML = `<p>${item.msg}</p>`
-            } 
-            });
-            if (checkResult) {
-                passCheck.innerHTML = '<span style="color: green;">Nice 😊</span>'
-            }
-    });
-
-    
-    // form check
-    form.addEventListener('submit', event => {
-        
-        if (!checkResult)
-        {
-            form.classList.add("was-validated");
-            event.preventDefault();
-            event.stopPropagation();
-        }
-    })
-
-</script>
 {% endblock %}
